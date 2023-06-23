@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="gcm_defaultSenderId" translatable="false">514349821431</string>
+    <string name="google_api_key" translatable="false">AIzaSyCN8HJRp0UbHwUEenOaFjDRNVKEKSMvY-0</string>
+    <string name="google_app_id" translatable="false">1:514349821431:android:ef19eeaba754d3c6e012f2</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCN8HJRp0UbHwUEenOaFjDRNVKEKSMvY-0</string>
+    <string name="google_storage_bucket" translatable="false">imperial-community.appspot.com</string>
+    <string name="project_id" translatable="false">imperial-community</string>
+</resources>

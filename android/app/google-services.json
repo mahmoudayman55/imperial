@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "514349821431",
+    "project_id": "imperial-community",
+    "storage_bucket": "imperial-community.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:514349821431:android:ef19eeaba754d3c6e012f2",
+        "android_client_info": {
+          "package_name": "com.imperial.desiukconnect"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCN8HJRp0UbHwUEenOaFjDRNVKEKSMvY-0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
