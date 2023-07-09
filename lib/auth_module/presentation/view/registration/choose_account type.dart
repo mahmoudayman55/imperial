@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:imperial/auth_module/presentation/controller/choose_account_controller.dart';
 
 import 'package:imperial/widgets/account_type_selector.dart';
 import 'package:imperial/widgets/custom_button.dart';
@@ -13,22 +14,12 @@ import 'package:imperial/widgets/swipe_up_button.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../core/utils/custom_colors.dart';
-import '../../controller/auth_controller.dart';
+import '../../controller/user_join_requests_controller.dart';
 import 'Individual/Individual_register_1.dart';
 import 'business _registration_view.dart';
 import 'community_registration.dart';
 
 class ChooseAccountView extends StatelessWidget {
-  // @override
-  // void initState() {
-  //   _selectedType = -1;
-  //   _types = [
-  //     'Individual',
-  //     'Community',
-  //     'Business',
-  //   ];
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Sizer(
@@ -79,7 +70,7 @@ class ChooseAccountView extends StatelessWidget {
                         width: width,
                         height: height * 0.06,
                         child:
-                            GetBuilder<AuthController>(builder: (controller) {
+                            GetBuilder<ChooseAccountTypeController>(builder: (controller) {
                           return Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.center,

@@ -36,9 +36,9 @@ class RegistrationRequestModel extends RegistrationRequest {
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson(bool isCommunity) {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['owner_name'] = ownerName;
+    data[isCommunity?"requested_by":'owner_name'] = ownerName;
     data['name'] = name;
     data['region_id'] = regionId;
     data['about'] = about;

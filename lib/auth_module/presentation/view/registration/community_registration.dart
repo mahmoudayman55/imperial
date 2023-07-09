@@ -3,7 +3,9 @@ import 'package:email_validator/email_validator.dart';
 import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:imperial/auth_module/presentation/controller/auth_controller.dart';
+import 'package:imperial/app_init_module/presentation/controller/region_controller.dart';
+import 'package:imperial/auth_module/presentation/controller/user_join_requests_controller.dart';
+import 'package:imperial/auth_module/presentation/controller/community_register_controller.dart';
 import 'package:imperial/view/home_view.dart';
 import 'package:imperial/view/loading_screen.dart';
 import 'package:imperial/widgets/account_type_selector.dart';
@@ -23,13 +25,10 @@ import '../../../../core/utils/uk_number_validator.dart';
 import '../../../../widgets/custom_drop_down.dart';
 import 'choose_account type.dart';
 
-class CommunityRegistrationView extends StatefulWidget {
-  @override
-  State<CommunityRegistrationView> createState() =>
-      _CommunityRegistrationViewState();
-}
 
-class _CommunityRegistrationViewState extends State<CommunityRegistrationView> {
+
+class CommunityRegistrationView extends StatelessWidget {
+  final regionController=Get.find<AppDataController>();
 
 
   @override
@@ -82,9 +81,9 @@ class _CommunityRegistrationViewState extends State<CommunityRegistrationView> {
                       child: Container(
                         height: height ,
                         padding: EdgeInsets.all(10),
-                        child: GetBuilder<AuthController>(
+                        child: GetBuilder<CommunityRegisterController>(
                           builder: (controller) {
-                            return controller.gettingCommunityRegions?LoadingScreen(width * 0.1): Form(
+                            return regionController.regions.isEmpty?LoadingScreen(width * 0.1): Form(
                               key: controller.registerCommunityFormKey,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -94,26 +93,26 @@ class _CommunityRegistrationViewState extends State<CommunityRegistrationView> {
                                   Expanded(
                                     flex: 2,
                                     child: CustomTextFormField( validator: (v){
-                                      if(controller.communityOwnerNameController.text.isEmpty){
+                                      if(controller.ownerNameController.text.isEmpty){
                                         return "This field cannot be empty";
                                       }
                                       return null;
                                     },
                                       textColor: Colors.white,
-                                      controller: controller.communityOwnerNameController,
+                                      controller: controller.ownerNameController,
                                       context: context,
                                       label: 'User Name',
                                     ),
                                   ),           Expanded(
                                     flex: 2,
                                     child: CustomTextFormField( validator: (v){
-                                      if(controller.communityAddressController.text.isEmpty){
+                                      if(controller.addressController.text.isEmpty){
                                         return "This field cannot be empty";
                                       }
                                       return null;
                                     },
                                       textColor: Colors.white,
-                                      controller: controller.communityAddressController,
+                                      controller: controller.addressController,
                                       context: context,
                                       label: 'Address',
                                     ),
@@ -121,13 +120,13 @@ class _CommunityRegistrationViewState extends State<CommunityRegistrationView> {
                                   Expanded(
                                     flex: 2,
                                     child: CustomTextFormField( validator: (v){
-                                      if(controller.communityNameController.text.isEmpty){
+                                      if(controller.nameController.text.isEmpty){
                                         return "This field cannot be empty";
                                       }
                                       return null;
                                     },
                                       textColor: Colors.white,
-                                      controller: controller.communityNameController,
+                                      controller: controller.nameController,
                                       context: context,
                                       label: 'Community Name',
                                     ),
@@ -136,11 +135,11 @@ class _CommunityRegistrationViewState extends State<CommunityRegistrationView> {
                                     flex: 2,
                                     child:    CustomTextFormField(keyboardType: TextInputType.emailAddress,
                                       controller:
-                                      controller.communityEmailController,
+                                      controller.emailController,
                                       validator: (value) {
 
-                                        if ( controller.communityEmailController.text.isEmpty ||
-                                            !EmailValidator.validate(controller.communityEmailController.text )) {
+                                        if ( controller.emailController.text.isEmpty ||
+                                            !EmailValidator.validate(controller.emailController.text )) {
                                           return "Invalid email address";
                                         }
                                         return null;
@@ -168,14 +167,14 @@ class _CommunityRegistrationViewState extends State<CommunityRegistrationView> {
                                         Expanded(flex: 10,
                                           child: CustomTextFormField(keyboardType: TextInputType.phone,
                                             controller:controller
-                                                .communityPhoneController,
+                                                .phoneController,
                                             context: context,
                                             label: "phone",
                                             textColor: Colors.white,
                                             validator: (v) {
                                               if (!isUkPhoneNumber(
                                                   "+44${controller
-                                                      .communityPhoneController
+                                                      .phoneController
                                                       .text}")) {
                                                 return "invalid phone number";
                                               }
@@ -190,7 +189,7 @@ class _CommunityRegistrationViewState extends State<CommunityRegistrationView> {
                                     flex: 2,
                                     child: CustomDropdownWidget(
                                         label: 'Region',
-                                        items: controller.regions,
+                                        items: regionController.regions,initialValue: regionController.regions[0],
                                         onChanged: (item) {
                                           controller.onCommunityRegionChanged(item);
                                         }),
@@ -198,7 +197,7 @@ class _CommunityRegistrationViewState extends State<CommunityRegistrationView> {
                                     flex: 2,
                                     child: CustomTextFormField(
                                       textColor: Colors.white,
-                                      controller: controller.communityWebsiteController,
+                                      controller: controller.websiteController,
                                       context: context,
                                       label: 'Web URL (optional)',
                                     ),
@@ -206,13 +205,13 @@ class _CommunityRegistrationViewState extends State<CommunityRegistrationView> {
                                   Expanded(
                                     flex: 3,
                                     child: CustomTextFormField( validator: (v){
-                                      if(controller.communityAboutController.text.isEmpty){
+                                      if(controller.aboutController.text.isEmpty){
                                         return "This field cannot be empty";
                                       }
                                       return null;
                                     },
                                       textColor: Colors.white,
-                                      controller: controller.communityAboutController,
+                                      controller: controller.aboutController,
                                       context: context,
                                       label: 'About your community',maxLines: 4,
                                     ),

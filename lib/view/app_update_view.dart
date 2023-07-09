@@ -10,60 +10,60 @@ import 'package:imperial/core/utils/custom_url_luncher.dart';
 import 'package:imperial/view/loading_screen.dart';
 import 'package:imperial/widgets/custom_cached_network_image.dart';
 import 'package:sizer/sizer.dart';
-import 'package:imperial/view/event_view_tabs/attendes_tab.dart';
-import 'package:imperial/view/event_view_tabs/details_tab.dart';
-import 'package:imperial/view/event_view_tabs/rules_tab.dart';
+import 'package:imperial/community_module/presentation/view/event_view_tabs/attendes_tab.dart';
+import 'package:imperial/community_module/presentation/view/event_view_tabs/details_tab.dart';
+import 'package:imperial/community_module/presentation/view/event_view_tabs/rules_tab.dart';
 import 'package:imperial/widgets/custom_button.dart';
 import '../core/utils/custom_colors.dart';
 import '../widgets/community_admin_widget.dart';
 import '../widgets/event_slider.dart';
 import '../widgets/event_widget.dart';
 import '../widgets/onBoarding_next_Button.dart';
-import 'package:intl/intl.dart';
-
-class AppUpdateView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Sizer(builder: (context, orientation, deviceType) {
-      final double height = 100.h;
-      final double width = 100.w;
-      return deviceType == DeviceType.mobile
-          ? Scaffold(
-              extendBodyBehindAppBar: true,
-              backgroundColor: Colors.grey.shade100,
-              body: GetBuilder<EventController>(builder: (controller) {
-                return SizedBox(
-                  height: height,
-                  child: Column(
-                    children: [
-                      Text(
-                        "New update available",
-                        style: Theme.of(context).textTheme.displayMedium,
-                      ),
-                      Row(
-                        children: [
-                          CustomButton(useGradient: false,
-                              height: height * 0.06,
-                              width: width * 0.4,
-                              onPressed: () {},
-                              label: "Update"),
-                                 CustomButton(useGradient: false,
-                              height: height * 0.06,
-                              width: width * 0.4,
-                              onPressed: () {},
-                              label: "Not Now"),
-
-                        ],
-                      )
-                    ],
-                  ),
-                );
-              }),
-            )
-          : SizedBox();
-    });
-  }
-}
+// import 'package:intl/intl.dart';
+//
+// class AppUpdateView extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Sizer(builder: (context, orientation, deviceType) {
+//       final double height = 100.h;
+//       final double width = 100.w;
+//       return deviceType == DeviceType.mobile
+//           ? Scaffold(
+//               extendBodyBehindAppBar: true,
+//               backgroundColor: Colors.grey.shade100,
+//               body: GetBuilder<EventController>(builder: (controller) {
+//                 return SizedBox(
+//                   height: height,
+//                   child: Column(
+//                     children: [
+//                       Text(
+//                         "New update available",
+//                         style: Theme.of(context).textTheme.displayMedium,
+//                       ),
+//                       Row(
+//                         children: [
+//                           CustomButton(useGradient: false,
+//                               height: height * 0.06,
+//                               width: width * 0.4,
+//                               onPressed: () {},
+//                               label: "Update"),
+//                                  CustomButton(useGradient: false,
+//                               height: height * 0.06,
+//                               width: width * 0.4,
+//                               onPressed: () {},
+//                               label: "Not Now"),
+//
+//                         ],
+//                       )
+//                     ],
+//                   ),
+//                 );
+//               }),
+//             )
+//           : SizedBox();
+//     });
+//   }
+// }
 
 //
 //

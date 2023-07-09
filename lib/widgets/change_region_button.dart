@@ -10,13 +10,13 @@ class ChangeRegionButton extends StatelessWidget {
   final double iconSize;
   final double width;
 
-  RegionController controller = Get.find<RegionController>();
+  AppDataController controller = Get.find<AppDataController>();
 
   ChangeRegionButton({this.iconSize = 3, required this.width});
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<RegionController>(builder: (c) {
+    return GetBuilder<AppDataController>(builder: (c) {
       return c.loading?
       LoadingScreen(width * 0.1): ( c.error? SizedBox.shrink(): Container(
         alignment: Alignment.centerLeft,

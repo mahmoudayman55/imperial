@@ -3,8 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:imperial/auth_module/data/models/user_model.dart';
-import 'package:imperial/auth_module/presentation/controller/auth_controller.dart';
+import 'package:imperial/auth_module/presentation/controller/user_join_requests_controller.dart';
 import 'package:imperial/community_module/presentation/controller/community_controller.dart';
+import 'package:imperial/user_module/presentation/controller/persone_profile_controller.dart';
 import 'package:imperial/view/loading_screen.dart';
 import 'package:imperial/widgets/custom_button.dart';
 import 'package:imperial/widgets/custom_cached_network_image.dart';
@@ -21,7 +22,6 @@ import '../widgets/onBoarding_next_Button.dart';
 import 'package:get/get.dart';
 
 class PersonProfileView extends StatelessWidget {
-  final communityController = Get.find<CommunityController>();
 
   PersonProfileView({super.key});
 
@@ -47,7 +47,7 @@ class PersonProfileView extends StatelessWidget {
               ),
             )),
         backgroundColor: Colors.grey.shade100,
-        body: GetBuilder<AuthController>(builder: (c) {
+        body: GetBuilder<PersonProfileController>(builder: (c) {
           return c.gettingPerson
               ? SizedBox(
               width: width,

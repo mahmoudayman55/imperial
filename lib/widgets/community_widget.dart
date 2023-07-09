@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:imperial/auth_module/presentation/controller/home_controller.dart';
 import 'package:imperial/community_module/domain/entity/event.dart';
 import 'package:imperial/community_module/presentation/controller/community_controller.dart';
 import 'package:imperial/view/community_profile_view.dart';
@@ -10,6 +11,7 @@ import 'package:imperial/widgets/custom_button.dart';
 import 'package:imperial/widgets/custom_cached_network_image.dart';
 
 import '../community_module/domain/entity/community.dart';
+import '../core/utils/app_constants.dart';
 import '../core/utils/custom_colors.dart';
 import 'event_slider.dart';
 import 'event_widget.dart';
@@ -139,12 +141,12 @@ class CommunityWidget extends StatelessWidget {
                             showEventDetails: false,
                           ),
                         ),
-                        GetBuilder<CommunityController>(
+                        GetBuilder<HomeController>(
                           builder: (controller) {
                             return CustomButton(
                               height: height * 0.15,
                               width: width * 0.25,
-                              onPressed: () => controller.getCommunity(community.id),
+                              onPressed: () => Get.toNamed(AppConstants.communityProfilePage,arguments: community.id),
                               borderColor: Colors.transparent,
                               label: 'visit',
                               icon: null,

@@ -12,6 +12,8 @@ import 'package:imperial/auth_module/domain/usecase/get_reset_password_code_use_
 import 'package:imperial/widgets/custom_snack_bar.dart';
 
 class ResetPasswordController extends GetxController {
+  final forgotPasswordFormKey = GlobalKey<FormState>();
+
   int currentStep = 0;
 
   TextEditingController emailController = TextEditingController();

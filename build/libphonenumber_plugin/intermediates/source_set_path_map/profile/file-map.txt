@@ -1,0 +1,12 @@
+com.example.libphonenumber_plugin-jetified-annotation-experimental-1.1.0-0 C:\Users\mahmoud\.gradle\caches\transforms-3\3795200b4ef80330da39fee63b1e3f99\transformed\jetified-annotation-experimental-1.1.0\res
+com.example.libphonenumber_plugin-jetified-window-java-1.0.0-beta04-1 C:\Users\mahmoud\.gradle\caches\transforms-3\4f8a10da11d41b9ccabff01515190014\transformed\jetified-window-java-1.0.0-beta04\res
+com.example.libphonenumber_plugin-core-1.6.0-2 C:\Users\mahmoud\.gradle\caches\transforms-3\ae42e6c01585f28a5adeac7499fca147\transformed\core-1.6.0\res
+com.example.libphonenumber_plugin-jetified-window-1.0.0-beta04-3 C:\Users\mahmoud\.gradle\caches\transforms-3\fa8aad42c825af1f34f93ab9a34c8ecb\transformed\jetified-window-1.0.0-beta04\res
+com.example.libphonenumber_plugin-main-4 C:\Users\mahmoud\AppData\Local\Pub\Cache\hosted\pub.flutter-io.cn\libphonenumber_plugin-0.3.1\android\src\main\res
+com.example.libphonenumber_plugin-profile-5 C:\Users\mahmoud\AppData\Local\Pub\Cache\hosted\pub.flutter-io.cn\libphonenumber_plugin-0.3.1\android\src\profile\res
+com.example.libphonenumber_plugin-pngs-6 E:\work\imperial\build\libphonenumber_plugin\generated\res\pngs\profile
+com.example.libphonenumber_plugin-resValues-7 E:\work\imperial\build\libphonenumber_plugin\generated\res\resValues\profile
+com.example.libphonenumber_plugin-rs-8 E:\work\imperial\build\libphonenumber_plugin\generated\res\rs\profile
+com.example.libphonenumber_plugin-mergeProfileResources-9 E:\work\imperial\build\libphonenumber_plugin\intermediates\incremental\profile\mergeProfileResources\merged.dir
+com.example.libphonenumber_plugin-mergeProfileResources-10 E:\work\imperial\build\libphonenumber_plugin\intermediates\incremental\profile\mergeProfileResources\stripped.dir
+com.example.libphonenumber_plugin-merged_res-11 E:\work\imperial\build\libphonenumber_plugin\intermediates\merged_res\profile

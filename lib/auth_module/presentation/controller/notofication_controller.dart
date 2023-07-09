@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
-import 'package:imperial/auth_module/presentation/controller/auth_controller.dart';
+import 'package:imperial/auth_module/presentation/controller/user_join_requests_controller.dart';
+import 'package:imperial/auth_module/presentation/controller/current_user_controller.dart';
 
 import '../../../widgets/custom_snack_bar.dart';
 import '../../../widgets/notification_snack_bar.dart';
@@ -32,11 +33,13 @@ class NotificationController extends GetxController {
 
 
 
-      final authController= Get.find<AuthController>();
-      if(authController.currentUser==null){
+
+
+      final currentUserController= Get.find<CurrentUserController>();
+      if(currentUserController.currentUser==null){
         return;
       }
-      authController.updateUserToken();
+      currentUserController.updateUserToken();
 
       notificationSnackBar(
         title: message.notification!.title.toString(),

@@ -15,7 +15,7 @@ class RegionSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<RegionController>(builder: (controller) {
+    return GetBuilder<AppDataController>(builder: (controller) {
       return Sizer(
         builder: (BuildContext context, Orientation orientation,
             DeviceType deviceType) {

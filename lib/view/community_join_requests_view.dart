@@ -8,7 +8,7 @@ import 'package:imperial/community_module/presentation/controller/community_cont
 import 'package:imperial/community_module/presentation/controller/event_controller.dart';
 
 import 'package:imperial/view/home_view.dart';
-import 'package:imperial/view/new_event_view.dart';
+import 'package:imperial/community_module/presentation/view/new_event_view.dart';
 import 'package:imperial/view/loading_screen.dart';
 import 'package:imperial/widgets/account_type_selector.dart';
 import 'package:imperial/widgets/community_join_request.dart';
@@ -55,7 +55,7 @@ class CommunityJoinRequestsView extends StatelessWidget {
                   )),
               backgroundColor: Colors.grey.shade100,
               body: SafeArea(
-                child: GetBuilder<CommunityController>(builder: (controller) {
+                child: GetBuilder<CommunityJoinRequestsController>(builder: (controller) {
                   return controller.gettingJoinRequests
                       ? Center(child: LoadingScreen(width * 0.1))
                       : controller.communityJoinRequests.isEmpty? Center(

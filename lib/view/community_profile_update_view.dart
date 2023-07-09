@@ -2,7 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
-import 'package:imperial/auth_module/presentation/controller/auth_controller.dart';
+import 'package:imperial/auth_module/presentation/controller/user_join_requests_controller.dart';
+import 'package:imperial/community_module/presentation/controller/update_community_profile_controller.dart';
 import 'package:imperial/view/loading_screen.dart';
 import 'package:imperial/widgets/custom_button.dart';
 import 'package:imperial/widgets/custom_cached_network_image.dart';
@@ -18,7 +19,6 @@ import '../widgets/onBoarding_next_Button.dart';
 import 'package:get/get.dart';
 
 class CommunityUpdateProfileView extends StatelessWidget {
-  final authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +41,8 @@ class CommunityUpdateProfileView extends StatelessWidget {
                 icon: Icons.arrow_back_ios_rounded,
               ),
             )),
-        body: GetBuilder<AuthController>(builder: (c) {
-          return authController.updatingCommunity
+        body: GetBuilder<UpdateCommunityProfileController>(builder: (c) {
+          return c.updatingCommunity
               ? SizedBox(
                   width: width,
                   height: height,
@@ -56,7 +56,7 @@ class CommunityUpdateProfileView extends StatelessWidget {
                           alignment: Alignment.center,
                           children: [
                             CustomCachedNetworkImage(
-                                imageUrl: authController
+                                imageUrl: c
                                     .currentCommunity.coverUrl,
                                 width: width,
                                 height: height),
@@ -76,7 +76,7 @@ class CommunityUpdateProfileView extends StatelessWidget {
                               bottom: 0,
                               right: 0,
                               child: InkWell(
-                                onTap: () =>authController.updateCommunityCover(),
+                                onTap: () =>c.updateCommunityCover(),
                                 child: Container(
                                   width: width,
                                   height: width * 0.08,
@@ -94,7 +94,7 @@ class CommunityUpdateProfileView extends StatelessWidget {
                             Container(padding: EdgeInsets.all(8 ),
                               decoration: BoxDecoration(color: Colors.black.withOpacity(0.4),borderRadius: BorderRadius.circular(10)),
                               child: Text(
-                                authController.currentCommunity.name,
+                                c.currentCommunity.name,
                                 textAlign: TextAlign.center,
                                 style: Theme.of(context).textTheme.headlineMedium,
                               ),
@@ -122,7 +122,7 @@ class CommunityUpdateProfileView extends StatelessWidget {
                                         .copyWith(color: Colors.black),
                                   ),
                                   Text(
-                                   authController.currentCommunity.membersNumber.toString(),
+                                   c.currentCommunity.membersNumber.toString(),
                                     textAlign: TextAlign.center,
                                     style: Theme
                                         .of(context)
@@ -148,7 +148,7 @@ class CommunityUpdateProfileView extends StatelessWidget {
                                         .copyWith(color: Colors.black),
                                   ),
                                   Text(
-                                    authController.currentCommunity.eventsNumber.toString(),
+                                    c.currentCommunity.eventsNumber.toString(),
                                     textAlign: TextAlign.center,
                                     style: Theme
                                         .of(context)
@@ -174,7 +174,7 @@ class CommunityUpdateProfileView extends StatelessWidget {
                                         .copyWith(color: Colors.black),
                                   ),
                                   Text(
-                                    authController.currentCommunity.admins.length.toString(),
+                                    c.currentCommunity.admins.length.toString(),
                                     textAlign: TextAlign.center,
                                     style: Theme
                                         .of(context)
@@ -194,7 +194,7 @@ class CommunityUpdateProfileView extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: SizedBox(height: height*0.64,
-                              child: Form(key: authController.updateCommunityFormKey,
+                              child: Form(key: c.updateCommunityFormKey,
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: [
@@ -202,12 +202,12 @@ class CommunityUpdateProfileView extends StatelessWidget {
                                       flex: 2,
                                       child: CustomTextFormField(
                                         validator: (v){
-                                          if(authController.communityUpdateNameController.text.isEmpty){
+                                          if(c.communityUpdateNameController.text.isEmpty){
                                             return "This filed cannot be empty";
                                           }
                                           return null;
                                         },
-                                        controller: authController.communityUpdateNameController,
+                                        controller: c.communityUpdateNameController,
                                         context: context,
                                         label: "Community Name",
                                         labelColor: Colors.black,
@@ -218,13 +218,13 @@ class CommunityUpdateProfileView extends StatelessWidget {
                                     Expanded(
                                       flex: 2,
                                       child: CustomTextFormField(  validator: (v){
-                                        if(authController.communityUpdateAddressController.text.isEmpty){
+                                        if(c.communityUpdateAddressController.text.isEmpty){
                                           return "This filed cannot be empty";
                                         }
                                         return null;
                                       },
                                         controller:
-                                        authController.communityUpdateAddressController,
+                                        c.communityUpdateAddressController,
                                         context: context,
                                         label: "address",
                                         labelColor: Colors.black,
@@ -235,13 +235,13 @@ class CommunityUpdateProfileView extends StatelessWidget {
                                     Expanded(
                                       flex: 2,
                                       child: CustomTextFormField(validator: (v){
-                                        if(authController.communityUpdateWebUrlController.text.isEmpty){
+                                        if(c.communityUpdateWebUrlController.text.isEmpty){
                                           return "This filed cannot be empty";
                                         }
                                         return null;
                                       },
                                         controller:
-                                        authController.communityUpdateWebUrlController,
+                                        c.communityUpdateWebUrlController,
                                         context: context,keyboardType: TextInputType.url,
                                         label: "Website URL",
                                         labelColor: Colors.black,
@@ -252,13 +252,13 @@ class CommunityUpdateProfileView extends StatelessWidget {
                                     Expanded(
                                       flex: 2,
                                       child: CustomTextFormField(validator: (v){
-                                        if(authController.communityUpdateAboutController.text.isEmpty){
+                                        if(c.communityUpdateAboutController.text.isEmpty){
                                           return "This filed cannot be empty";
                                         }
                                         return null;
                                       },
                                         controller:
-                                        authController.communityUpdateAboutController,
+                                        c.communityUpdateAboutController,
                                         context: context,
                                         label: "About",
                                         labelColor: Colors.black,
@@ -273,7 +273,7 @@ class CommunityUpdateProfileView extends StatelessWidget {
                                         height: height * 0.06,
                                         width: width,
                                         onPressed: () {
-                                          authController.updateCommunity();
+                                          c.updateCommunity();
                                         },
                                         label: 'Update',
                                         useGradient: false,

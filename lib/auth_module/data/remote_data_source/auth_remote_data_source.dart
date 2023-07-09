@@ -27,7 +27,9 @@ abstract class BaseAuthRemoteDataSource {
 
   Future<String> sendNotification(AppNotification notification);
 
-  Future<String> sendRegistrationRequest(
+  Future<String> sendServiceRegistrationRequest(
+      RegistrationRequest registrationRequest);
+  Future<String> sendCommunityRegistrationRequest(
       RegistrationRequest registrationRequest);
 
   Future<List<UserJoinRequest>> getUserJoinRequests(int id);
@@ -89,11 +91,11 @@ class AuthRemoteDataSource extends BaseAuthRemoteDataSource {
   }
 
   @override
-  Future<String> sendRegistrationRequest(
+  Future<String> sendServiceRegistrationRequest(
       RegistrationRequest registrationRequest) async {
     try {
-      final response = await Dio().post(AppConstants.regRequest,
-          data: (registrationRequest as RegistrationRequestModel).toJson());
+      final response = await Dio().post(AppConstants.regService,
+          data: (registrationRequest as RegistrationRequestModel).toJson(false));
       return response.data["msg"].toString();
     } on DioError catch (e) {
       log("Dio error: " + e.toString());
@@ -104,6 +106,25 @@ class AuthRemoteDataSource extends BaseAuthRemoteDataSource {
         throw ServerException(
             ErrorMessageModel(message: "No internet connection"));
       }
+      throw ServerException(ErrorMessageModel.fromJson(e.response!.data));
+    }
+  }  @override
+  Future<String> sendCommunityRegistrationRequest(
+      RegistrationRequest registrationRequest) async {
+    try {
+      final response = await Dio().post(AppConstants.regCommunity,
+          data: (registrationRequest as RegistrationRequestModel).toJson(true));
+      return "Your request sent Successfully";
+    } on DioError catch (e) {
+      log("Dio error: " + e.toString());
+
+      if (e.type == DioErrorType.connectionError ||
+          e.type == DioErrorType.receiveTimeout ||
+          e.type == DioErrorType.unknown) {
+        throw ServerException(
+            ErrorMessageModel(message: "No internet connection"));
+      }
+      log(e.response!.data.toString());
       throw ServerException(ErrorMessageModel.fromJson(e.response!.data));
     }
   }
@@ -295,4 +316,6 @@ class AuthRemoteDataSource extends BaseAuthRemoteDataSource {
       throw ServerException(ErrorMessageModel.fromJson(e.response!.data));
     }
   }
+
+
 }

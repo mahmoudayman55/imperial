@@ -5,9 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:imperial/community_module/domain/entity/event.dart';
 import 'package:imperial/community_module/presentation/controller/event_controller.dart';
+import 'package:imperial/community_module/presentation/controller/event_tickets_controller.dart';
 
 import 'package:imperial/view/home_view.dart';
-import 'package:imperial/view/new_event_view.dart';
+import 'package:imperial/community_module/presentation/view/new_event_view.dart';
 import 'package:imperial/view/loading_screen.dart';
 import 'package:imperial/widgets/account_type_selector.dart';
 import 'package:imperial/widgets/community_ticket_request_widget.dart';
@@ -27,10 +28,10 @@ import '../../../../core/utils/custom_colors.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class EventsTicketsView extends StatelessWidget {
-  int eventId;
-  final eventC=Get.find<EventController>();
 
-  EventsTicketsView(this.eventId);
+  final eventC=Get.find<EventTicketsController>();
+
+  EventsTicketsView();
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +71,7 @@ class EventsTicketsView extends StatelessWidget {
               )),
           backgroundColor: Colors.grey.shade100,
           body: SafeArea(
-            child: GetBuilder<EventController>(builder: (controller) {
+            child: GetBuilder<EventTicketsController>(builder: (controller) {
               return controller.gettingEventTickets ||
                   controller.addingAttendee
                   ? Center(child: LoadingScreen(width * 0.1))
@@ -83,7 +84,7 @@ class EventsTicketsView extends StatelessWidget {
                       child: CommunityTicketRequestWidget(
                           request: controller.tickets[index],
                           width: width,
-                          eventId: eventId,
+                          eventId: controller.eventId,
                           height: height * 0.3),
                     );
                   })

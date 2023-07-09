@@ -67,7 +67,7 @@ class OnBoardingController extends GetxController {
   }
 
   submit()async {
-    final _regionsController = Get.find<RegionController>();
+    final _regionsController = Get.find<AppDataController>();
     await    _regionsController.submit();
    await _regionsController.getCurrentRegion();
 

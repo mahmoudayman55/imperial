@@ -7,16 +7,17 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:imperial/app_init_module/presentation/controller/app_update_controller.dart';
 import 'package:imperial/app_init_module/presentation/controller/region_controller.dart';
-import 'package:imperial/auth_module/presentation/controller/auth_controller.dart';
+import 'package:imperial/auth_module/presentation/controller/user_join_requests_controller.dart';
+import 'package:imperial/auth_module/presentation/controller/current_user_controller.dart';
 import 'package:imperial/auth_module/presentation/controller/notofication_controller.dart';
 import 'package:imperial/core/utils/custom_url_luncher.dart';
 import 'package:imperial/service_module/data/model/service_category_model.dart';
-import 'package:imperial/service_module/presentation/controller/service_controller.dart';
+import 'package:imperial/service_module/presentation/controller/service_profile_controller.dart';
 import 'package:imperial/view/community_events_view.dart';
 import 'package:imperial/view/community_join_requests_view.dart';
 import 'package:imperial/view/new_ticket_view.dart';
 import 'package:imperial/view/loading_screen.dart';
-import 'package:imperial/view/user_profile_view.dart';
+import 'package:imperial/auth_module/presentation/view/user_profile_view.dart';
 import 'package:imperial/widgets/account_type_selector.dart';
 import 'package:imperial/widgets/change_region_button.dart';
 import 'package:imperial/widgets/community_widget.dart';
@@ -38,10 +39,12 @@ import 'package:sizer/sizer.dart';
 
 import '../app_init_module/domain/entities/region_entity.dart';
 import '../auth_module/domain/entities/user_entity.dart';
+import '../auth_module/presentation/controller/home_controller.dart';
 import '../auth_module/presentation/view/registration/choose_account type.dart';
 import '../community_module/domain/entity/community.dart';
 import '../community_module/presentation/controller/community_controller.dart';
 import '../community_module/presentation/controller/event_controller.dart';
+import '../core/utils/app_constants.dart';
 import '../core/utils/custom_colors.dart';
 import '../../../widgets/custom_password_field.dart';
 import '../search_module/presentation/controller/search_controller.dart';
@@ -53,13 +56,12 @@ import '../auth_module/presentation/view/login.dart';
 import 'package:imperial/auth_module/presentation/controller/notofication_controller.dart';
 
 class HomeView extends StatelessWidget {
-  RegionController regionController = Get.find<RegionController>();
+  AppDataController appDataController = Get.find<AppDataController>();
+  CurrentUserController currentUserController =
+      Get.find<CurrentUserController>();
   NotificationController notificationC = Get.find<NotificationController>();
-  ServiceController serviceController = Get.find<ServiceController>();
-  CommunityController communityController = Get.find<CommunityController>();
-  EventController eventsController = Get.find<EventController>();
-  AuthController authController = Get.find<AuthController>();
   HomeSearchController searchController = Get.find<HomeSearchController>();
+  HomeController homeController = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -285,14 +287,14 @@ class HomeView extends StatelessWidget {
                     height: height,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: GetBuilder<AuthController>(builder: (c) {
+                      child: GetBuilder<CurrentUserController>(builder: (c) {
                         return Column(
                           children: [
-                            if (authController.currentUser != null)
+                            if (c.currentUser != null)
                               Expanded(
                                 flex: 1,
                                 child: UserInfoHeader(
-                                  user: authController.currentUser as User,
+                                  user: c.currentUser as User,
                                   height: height * 0.1,
                                   width: width * 0.8,
                                 ),
@@ -309,93 +311,98 @@ class HomeView extends StatelessWidget {
                                   label: 'Home',
                                 ),
                                 Divider(),
-                                if (authController.currentUser == null)
+                                if (c.currentUser == null)
                                   MenuButton(
                                     height: height * 0.05,
                                     width: width * 0.65,
                                     useGradient: false,
                                     onPressed: () {
-                                      Get.to(LogInView());
+                                      Get.toNamed(AppConstants.loginPage);
                                     },
                                     icon: Icons.login,
                                     label: 'Sign In',
                                     color: Colors.grey.shade300,
                                     textColor: Colors.black,
                                   ),
-                                if (authController.currentUser == null)
-                                  const Divider(),
-                                if (authController.currentUser == null)
+                                if (c.currentUser == null) const Divider(),
+                                if (c.currentUser == null)
                                   MenuButton(
                                     height: height * 0.05,
                                     width: width * 0.65,
                                     useGradient: false,
                                     onPressed: () {
-                                      Get.to(ChooseAccountView());
+                                      Get.toNamed(AppConstants.accountTypePage);
                                     },
                                     icon: Icons.app_registration,
                                     label: 'Register',
                                     color: Colors.grey.shade300,
                                     textColor: Colors.black,
                                   ),
-                                if (authController.currentUser == null)
-                                  Divider(),
-                                if (authController.currentUser != null)
+                                if (c.currentUser == null) Divider(),
+                                if (c.currentUser != null)
                                   MenuButton(
                                     height: height * 0.05,
                                     width: width * 0.65,
                                     useGradient: false,
                                     onPressed: () async {
-                                      authController.goToProfile();
+                                      c.goToProfile();
                                     },
                                     icon: Icons.person_outline,
                                     label: 'Profile',
                                     color: Colors.grey.shade300,
                                     textColor: Colors.black,
                                   ),
-                                if (authController.currentUser != null)
-                                  Divider(),
-                                if (authController.currentUser != null &&
-                                    authController.currentUser!.role != "admin")
+                                if (c.currentUser != null) Divider(),
+                                if (c.currentUser != null &&
+                                    c.currentUser!.role != "admin")
                                   MenuButton(
                                     height: height * 0.05,
                                     width: width * 0.65,
                                     useGradient: false,
                                     onPressed: () async {
-                                      authController.geUserJoinRequests();
+                                      Get.toNamed(AppConstants.userJoinRequestPage,arguments: currentUserController.currentUser!.id);
                                     },
-                                    icon: Icons.person_outline,
-                                    label: 'Join requests',
+                                    icon: Icons.group_add_outlined,
+                                    label: 'My join requests',
                                     color: Colors.grey.shade300,
                                     textColor: Colors.black,
                                   ),
-                                if (authController.currentUser != null &&
-                                    authController.currentUser!.role != "admin")
+                                if (c.currentUser != null &&
+                                    c.currentUser!.role != "admin")
                                   Divider(),
-                                if (authController.currentUser != null)
+                                if (c.currentUser != null)
                                   MenuButton(
                                     height: height * 0.05,
                                     width: width * 0.65,
                                     useGradient: false,
                                     onPressed: () async {
-                                      authController.getUserTicketRequests();
+                                      Get.toNamed(AppConstants.userTicketsPage,
+                                          arguments: currentUserController
+                                              .currentUser!.id);
                                     },
-                                    icon: Icons.person_outline,
-                                    label: 'Ticket requests',
+                                    icon: Icons.confirmation_num_outlined,
+                                    label: 'My tickets',
                                     color: Colors.grey.shade300,
                                     textColor: Colors.black,
                                   ),
-                                if (authController.currentUser != null)
-                                  Divider(),
-                                if (authController.currentUser != null)
-                                  (authController.currentUser!.role == 'admin'
+                                if (c.currentUser != null) Divider(),
+                                if (c.currentUser != null)
+                                  (c.currentUser!.role == 'admin'
                                       ? MenuButton(
                                           height: height * 0.05,
                                           width: width * 0.65,
                                           useGradient: false,
                                           onPressed: () {
-                                            eventsController.getCommunityEvents(
-                                                authController.currentUser!
-                                                    .community!.id);
+                                            Get.toNamed(
+                                                AppConstants
+                                                    .communityEventsPage,
+                                                arguments: currentUserController
+                                                    .currentUser!
+                                                    .community!
+                                                    .id);
+                                            // eventsController.getCommunityEvents(
+                                            //     c.currentUser!
+                                            //         .community!.id);
                                             // eventsController
                                             //     .uploadEventCovers();
                                           },
@@ -405,70 +412,79 @@ class HomeView extends StatelessWidget {
                                           textColor: Colors.black,
                                         )
                                       : SizedBox()),
-                                if (authController.currentUser != null)
-                                  (authController.currentUser!.role == 'admin')
+                                if (c.currentUser != null)
+                                  (c.currentUser!.role == 'admin')
                                       ? Divider()
                                       : SizedBox(),
-                                if (authController.currentUser != null)
-                                  (authController.currentUser!.role == 'admin'
+                                if (c.currentUser != null)
+                                  (c.currentUser!.role == 'admin'
                                       ? MenuButton(
                                           height: height * 0.05,
                                           width: width * 0.65,
                                           useGradient: false,
                                           onPressed: () {
-                                            authController
-                                                .initCommunityProfile();
-                                            // eventsController
-                                            //     .uploadEventCovers();
+                                            Get.toNamed(
+                                                AppConstants
+                                                    .updateCommunityProfilePage,
+                                                arguments: currentUserController
+                                                    .currentUser!
+                                                    .community!
+                                                    .id);
                                           },
-                                          icon: Icons.event,
+                                          icon: Icons.groups_2_outlined,
                                           label: 'Community Profile',
                                           color: Colors.grey.shade300,
                                           textColor: Colors.black,
                                         )
                                       : SizedBox()),
-                                if (authController.currentUser != null)
-                                  (authController.currentUser!.role == 'admin'
+                                if (c.currentUser != null)
+                                  (c.currentUser!.role == 'admin'
                                       ? Divider()
                                       : SizedBox()),
-                                if (authController.currentUser != null)
-                                  (authController.currentUser!.role == 'admin'
+                                if (c.currentUser != null)
+                                  (c.currentUser!.role == 'admin'
                                       ? MenuButton(
                                           height: height * 0.05,
                                           width: width * 0.65,
                                           useGradient: false,
                                           onPressed: () {
-                                            communityController
-                                                .getCommunityJoinRequest(
-                                                    authController.currentUser!
-                                                        .community!.id);
-                                            Get.to(CommunityJoinRequestsView());
+                                            // communityController
+                                            //     .getCommunityJoinRequest(
+                                            //     c.currentUser!
+                                            //             .community!.id);
+                                            // Get.to(CommunityJoinRequestsView());
+                                            Get.toNamed(
+                                                AppConstants
+                                                    .communityJoinRequestsPage,
+                                                arguments: currentUserController
+                                                    .currentUser!
+                                                    .community!
+                                                    .id);
                                           },
                                           icon: Icons.message_outlined,
-                                          label: 'Join Requests',
+                                          label: 'Community Join Requests',
                                           color: Colors.grey.shade300,
                                           textColor: Colors.black,
                                         )
                                       : SizedBox()),
-                                if (authController.currentUser != null)
-                                  (authController.currentUser!.role == 'admin'
+                                if (c.currentUser != null)
+                                  (c.currentUser!.role == 'admin'
                                       ? Divider()
                                       : SizedBox()),
-                                if (authController.currentUser != null)
+                                if (c.currentUser != null)
                                   MenuButton(
                                     height: height * 0.05,
                                     width: width * 0.65,
                                     useGradient: false,
                                     onPressed: () async {
-                                      authController.logout();
+                                      c.logout();
                                     },
                                     icon: Icons.logout,
                                     label: 'Logout',
                                     color: Colors.grey.shade300,
                                     textColor: Colors.black,
                                   ),
-                                if (authController.currentUser != null)
-                                  Divider(),
+                                if (c.currentUser != null) Divider(),
                                 MenuButton(
                                   height: height * 0.05,
                                   width: width * 0.65,
@@ -526,19 +542,17 @@ class HomeView extends StatelessWidget {
                     builder: (context, snapshot) {
                       return snapshot.hasData
                           ? RefreshIndicator(
-                            onRefresh: () async {
-                                regionController.onInit();
-                                serviceController.onInit();
-                                communityController.onInit();
-                                eventsController.onInit();
-                                authController.onInit();
+                              onRefresh: () async {
+                                appDataController.onInit();
+                                homeController.onInit();
+
                                 log("message");
                               },
-                            color: CustomColors.red,
-                            child: Container(
-                              height: height,
-                              padding: const EdgeInsets.all(8.0),
-                              child: SingleChildScrollView(
+                              color: CustomColors.red,
+                              child: Container(
+                                height: height,
+                                padding: const EdgeInsets.all(8.0),
+                                child: SingleChildScrollView(
                                   child: Column(
                                     children: [
                                       se.SearchBar(
@@ -576,10 +590,10 @@ class HomeView extends StatelessWidget {
                                         ),
                                       ),
                                       Obx(
-                                        () => eventsController
+                                        () => homeController
                                                 .loadingHomeEvents.value
                                             ? LoadingScreen(width * 0.1)
-                                            : (eventsController.events.isEmpty
+                                            : (homeController.events.isEmpty
                                                 ? Text(
                                                     "No events founded",
                                                     style: Theme.of(context)
@@ -591,7 +605,7 @@ class HomeView extends StatelessWidget {
                                                   )
                                                 : EventSlider(
                                                     events:
-                                                        eventsController.events,
+                                                        homeController.events,
                                                     width: width,
                                                     height: height * 0.2,
                                                   )),
@@ -626,123 +640,130 @@ class HomeView extends StatelessWidget {
                                       ),
                                       Obx(
                                         () =>
-                                            serviceController
+                                            homeController
                                                     .loadingHomeServices.value
                                                 ? LoadingScreen(width * 0.1)
                                                 : Column(
-                                                        children: [
-                                                          SizedBox(
-                                                            width: width,
-                                                            height:
-                                                                height * 0.04,
-                                                            child: ListView
-                                                                .separated(
-                                                              scrollDirection:
-                                                                  Axis.horizontal,
-                                                              itemCount: serviceController
-                                                                      .serviceCategories
-                                                                      .length +
-                                                                  1,
-                                                              itemBuilder:
-                                                                  (BuildContext
-                                                                          context,
-                                                                      int index) {
-                                                                return index ==
-                                                                        0
-                                                                    ? InkWell(
-                                                                        onTap: () =>
-                                                                            serviceController.onChangeServiceCategory(0),
-                                                                        child:
-                                                                            ServiceIconWidget(
-                                                                          width:
-                                                                              0.25 * width,
-                                                                          serviceCategory: ServiceCategoryModel(
-                                                                              id: 0,
-                                                                              name: "All",
-                                                                              icon: "https://i.ibb.co/86BPtML/icons8-all-32.png"),
-                                                                          color: serviceController.selectedCategoryId == 0
-                                                                              ? CustomColors.red
-                                                                              : Colors.grey,
-                                                                        ),
-                                                                      )
-                                                                    : InkWell(
-                                                                        onTap: () => serviceController.onChangeServiceCategory(serviceController
-                                                                            .serviceCategories[index-1]
-                                                                            .id),
-                                                                        child:
-                                                                            ServiceIconWidget(
-                                                                          width:
-                                                                              0.25 * width,
-                                                                          serviceCategory:
-                                                                              serviceController.serviceCategories[index-1],
-                                                                          color: serviceController.selectedCategoryId == serviceController.serviceCategories[index-1].id
-                                                                              ? CustomColors.red
-                                                                              : Colors.grey,
-                                                                        ),
-                                                                      );
-                                                              },
-                                                              separatorBuilder:
-                                                                  (BuildContext
-                                                                          context,
-                                                                      int index) {
-                                                                return SizedBox(
-                                                                    width:
-                                                                        16.0);
-                                                              },
-                                                            ),
-                                                          ),
-                                        serviceController
-                                            .services.isEmpty
-                                            ? Text(
-                                          "No services founded",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(
-                                              color:
-                                              CustomColors
-                                                  .red),
-                                        )
-                                            :            GridView.count(
-                                                            shrinkWrap: true,
-                                                            crossAxisCount: 2,
-                                                            physics:
-                                                                NeverScrollableScrollPhysics(),
-                                                            childAspectRatio:
-                                                                width /
-                                                                    (height *
-                                                                        0.8),
-                                                            children:
-                                                                List.generate(
-                                                              serviceController
-                                                                  .services
-                                                                  .length,
-                                                              (index) =>
-                                                                  Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        8.0),
-                                                                child:
-                                                                    ServiceWidget(
-                                                                  width: width *
-                                                                      0.4,
-                                                                  height: 0.3 *
-                                                                      height,
-                                                                  service: serviceController
-                                                                          .services[
-                                                                      index],
-                                                                  onPressed: () =>
-                                                                      serviceController.onSelectService(serviceController
-                                                                          .services[
-                                                                              index]
-                                                                          .id),
+                                                    children: [
+                                                      SizedBox(
+                                                        width: width,
+                                                        height: height * 0.04,
+                                                        child:
+                                                            ListView.separated(
+                                                          scrollDirection:
+                                                              Axis.horizontal,
+                                                          itemCount: homeController
+                                                                  .serviceCategories
+                                                                  .length +
+                                                              1,
+                                                          itemBuilder:
+                                                              (BuildContext
+                                                                      context,
+                                                                  int index) {
+                                                            return index == 0
+                                                                ? InkWell(
+                                                                    onTap: () =>
+                                                                        homeController
+                                                                            .onChangeServiceCategory(0),
+                                                                    child:
+                                                                        ServiceIconWidget(
+                                                                      width: 0.25 *
+                                                                          width,
+                                                                      serviceCategory: ServiceCategoryModel(
+                                                                          id: 0,
+                                                                          name:
+                                                                              "All",
+                                                                          icon:
+                                                                              "https://i.ibb.co/86BPtML/icons8-all-32.png"),
+                                                                      color: homeController.selectedCategoryId == 0
+                                                                          ? CustomColors
+                                                                              .red
+                                                                          : Colors
+                                                                              .grey,
+                                                                    ),
+                                                                  )
+                                                                : InkWell(
+                                                                    onTap: () => homeController.onChangeServiceCategory(homeController
+                                                                        .serviceCategories[
+                                                                            index -
+                                                                                1]
+                                                                        .id),
+                                                                    child:
+                                                                        ServiceIconWidget(
+                                                                      width: 0.25 *
+                                                                          width,
+                                                                      serviceCategory: homeController
+                                                                              .serviceCategories[
+                                                                          index -
+                                                                              1],
+                                                                      color: homeController.selectedCategoryId == homeController.serviceCategories[index - 1].id
+                                                                          ? CustomColors
+                                                                              .red
+                                                                          : Colors
+                                                                              .grey,
+                                                                    ),
+                                                                  );
+                                                          },
+                                                          separatorBuilder:
+                                                              (BuildContext
+                                                                      context,
+                                                                  int index) {
+                                                            return SizedBox(
+                                                                width: 16.0);
+                                                          },
+                                                        ),
+                                                      ),
+                                                      homeController
+                                                              .services.isEmpty
+                                                          ? Text(
+                                                              "No services founded",
+                                                              style: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .bodyMedium!
+                                                                  .copyWith(
+                                                                      color: CustomColors
+                                                                          .red),
+                                                            )
+                                                          : GridView.count(
+                                                              shrinkWrap: true,
+                                                              crossAxisCount: 2,
+                                                              physics:
+                                                                  NeverScrollableScrollPhysics(),
+                                                              childAspectRatio:
+                                                                  width /
+                                                                      (height *
+                                                                          0.8),
+                                                              children:
+                                                                  List.generate(
+                                                                homeController
+                                                                    .services
+                                                                    .length,
+                                                                (index) =>
+                                                                    Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          8.0),
+                                                                  child: ServiceWidget(
+                                                                      width: width *
+                                                                          0.4,
+                                                                      height: 0.3 *
+                                                                          height,
+                                                                      service: homeController
+                                                                              .services[
+                                                                          index],
+                                                                      onPressed: () => Get.toNamed(
+                                                                          AppConstants
+                                                                              .serviceProfilePage,
+                                                                          arguments: homeController
+                                                                              .services[index]
+                                                                              .id)),
                                                                 ),
                                                               ),
                                                             ),
-                                                          ),
-                                                        ],
-                                                      ),
+                                                    ],
+                                                  ),
                                       ),
                                       SizedBox(
                                         height: 0.03 * height,
@@ -772,11 +793,10 @@ class HomeView extends StatelessWidget {
                                           ],
                                         ),
                                       ),
-                                      Obx(() => communityController
+                                      Obx(() => homeController
                                               .loadingHomeCommunities.value
                                           ? LoadingScreen(width * 0.1)
-                                          : (communityController
-                                                  .communities.isEmpty
+                                          : (homeController.communities.isEmpty
                                               ? Text(
                                                   "No communities founded",
                                                   style: Theme.of(context)
@@ -794,7 +814,7 @@ class HomeView extends StatelessWidget {
                                                       (BuildContext context,
                                                               int index) =>
                                                           SizedBox(height: 20),
-                                                  itemCount: communityController
+                                                  itemCount: homeController
                                                       .communities
                                                       .toList()
                                                       .length,
@@ -804,26 +824,25 @@ class HomeView extends StatelessWidget {
                                                     return CommunityWidget(
                                                       width: width,
                                                       height: height * 0.3,
-                                                      community:
-                                                          communityController
-                                                              .communities
-                                                              .toList()[index],
+                                                      community: homeController
+                                                          .communities
+                                                          .toList()[index],
                                                     );
                                                   },
                                                 ))),
                                     ],
                                   ),
                                 ),
-                            ),
-                          )
+                              ),
+                            )
                           : Center(
                               child: CustomErrorWidget(
                               onPressed: () {
-                                regionController.onInit();
-                                serviceController.onInit();
-                                communityController.onInit();
-                                eventsController.onInit();
-                                authController.onInit();
+                                appDataController.onInit();
+                                homeController.onInit();
+                                //communityController.onInit();
+                                // eventsController.onInit();
+                                // authController.onInit();
                                 Get.offAllNamed("/home");
                               },
                               message: "No internet",

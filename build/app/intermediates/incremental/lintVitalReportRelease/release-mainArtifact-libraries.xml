@@ -212,9 +212,9 @@
       externalAnnotations="annotations.zip"
       proguardRules="proguard.txt"/>
   <library
-      name="io.flutter:flutter_embedding_release:1.0.0-b4fb11214dd2dda6ce012dd98ea498e9e8b91262@jar"
-      jars="C:\Users\mahmoud\.gradle\caches\modules-2\files-2.1\io.flutter\flutter_embedding_release\1.0.0-b4fb11214dd2dda6ce012dd98ea498e9e8b91262\fca7ab8a6415508af2225862319ca560dec653f\flutter_embedding_release-1.0.0-b4fb11214dd2dda6ce012dd98ea498e9e8b91262.jar"
-      resolved="io.flutter:flutter_embedding_release:1.0.0-b4fb11214dd2dda6ce012dd98ea498e9e8b91262"/>
+      name="io.flutter:flutter_embedding_release:1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420@jar"
+      jars="C:\Users\mahmoud\.gradle\caches\modules-2\files-2.1\io.flutter\flutter_embedding_release\1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420\791cf6662213614ac515b13bbd2083cf60dcf61e\flutter_embedding_release-1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420.jar"
+      resolved="io.flutter:flutter_embedding_release:1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420"/>
   <library
       name="androidx.fragment:fragment:1.3.6@aar"
       jars="C:\Users\mahmoud\.gradle\caches\transforms-3\9c4c60fdcb5125f20d568fb7e18b752b\transformed\fragment-1.3.6\jars\classes.jar"
@@ -422,17 +422,17 @@
       jars="C:\Users\mahmoud\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib-jdk7\1.8.10\cb726a23c808a850a43e7d6b9d1ba91b02fe9f05\kotlin-stdlib-jdk7-1.8.10.jar"
       resolved="org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.10"/>
   <library
-      name="io.flutter:armeabi_v7a_release:1.0.0-b4fb11214dd2dda6ce012dd98ea498e9e8b91262@jar"
-      jars="C:\Users\mahmoud\.gradle\caches\modules-2\files-2.1\io.flutter\armeabi_v7a_release\1.0.0-b4fb11214dd2dda6ce012dd98ea498e9e8b91262\3d926577a4aae928a50c5e24f61eb84eebb79db2\armeabi_v7a_release-1.0.0-b4fb11214dd2dda6ce012dd98ea498e9e8b91262.jar"
-      resolved="io.flutter:armeabi_v7a_release:1.0.0-b4fb11214dd2dda6ce012dd98ea498e9e8b91262"/>
+      name="io.flutter:armeabi_v7a_release:1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420@jar"
+      jars="C:\Users\mahmoud\.gradle\caches\modules-2\files-2.1\io.flutter\armeabi_v7a_release\1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420\c9f7bcf2d86a2218089a99fca3de3669a1e03924\armeabi_v7a_release-1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420.jar"
+      resolved="io.flutter:armeabi_v7a_release:1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420"/>
   <library
-      name="io.flutter:arm64_v8a_release:1.0.0-b4fb11214dd2dda6ce012dd98ea498e9e8b91262@jar"
-      jars="C:\Users\mahmoud\.gradle\caches\modules-2\files-2.1\io.flutter\arm64_v8a_release\1.0.0-b4fb11214dd2dda6ce012dd98ea498e9e8b91262\272cc253868c6b784051aefb6f6cd36875026146\arm64_v8a_release-1.0.0-b4fb11214dd2dda6ce012dd98ea498e9e8b91262.jar"
-      resolved="io.flutter:arm64_v8a_release:1.0.0-b4fb11214dd2dda6ce012dd98ea498e9e8b91262"/>
+      name="io.flutter:arm64_v8a_release:1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420@jar"
+      jars="C:\Users\mahmoud\.gradle\caches\modules-2\files-2.1\io.flutter\arm64_v8a_release\1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420\a17dc953f5084a8f2b87d93e3ae01b763fe881ec\arm64_v8a_release-1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420.jar"
+      resolved="io.flutter:arm64_v8a_release:1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420"/>
   <library
-      name="io.flutter:x86_64_release:1.0.0-b4fb11214dd2dda6ce012dd98ea498e9e8b91262@jar"
-      jars="C:\Users\mahmoud\.gradle\caches\modules-2\files-2.1\io.flutter\x86_64_release\1.0.0-b4fb11214dd2dda6ce012dd98ea498e9e8b91262\5e3d21914cae582830e4d837bba2a7993395615b\x86_64_release-1.0.0-b4fb11214dd2dda6ce012dd98ea498e9e8b91262.jar"
-      resolved="io.flutter:x86_64_release:1.0.0-b4fb11214dd2dda6ce012dd98ea498e9e8b91262"/>
+      name="io.flutter:x86_64_release:1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420@jar"
+      jars="C:\Users\mahmoud\.gradle\caches\modules-2\files-2.1\io.flutter\x86_64_release\1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420\44d8c79838c2a07cc302163f4665756a8c412a3c\x86_64_release-1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420.jar"
+      resolved="io.flutter:x86_64_release:1.0.0-45f6e009110df4f34ec2cf99f63cf73b71b7a420"/>
   <library
       name="androidx.arch.core:core-runtime:2.2.0@aar"
       jars="C:\Users\mahmoud\.gradle\caches\transforms-3\b7989db408e59e601567a8e3e4f2bf8d\transformed\core-runtime-2.2.0\jars\classes.jar"

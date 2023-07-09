@@ -1,12 +1,15 @@
 import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:imperial/auth_module/presentation/controller/home_controller.dart';
 import 'package:imperial/community_module/presentation/controller/community_controller.dart';
 import 'package:imperial/community_module/presentation/controller/event_controller.dart';
 import 'package:imperial/search_module/domain/entity/search_result_entity.dart';
-import 'package:imperial/service_module/presentation/controller/service_controller.dart';
+import 'package:imperial/service_module/presentation/controller/service_profile_controller.dart';
 import 'package:imperial/widgets/custom_button.dart';
 import 'package:imperial/widgets/custom_cached_network_image.dart';
+
+import '../../../core/utils/app_constants.dart';
 
 class SearchResultWidget extends StatelessWidget {
   double width, height, iconSize;
@@ -82,20 +85,19 @@ class SearchResultWidget extends StatelessWidget {
                                     switch (searchResult.type){
                                     case "community":
                                     {
-                                    final C=Get.find<CommunityController>();
-                                    C.getCommunity(searchResult.id);
+                                      Get.toNamed(AppConstants.communityProfilePage,arguments: searchResult.id);
                                     }
                                     break;
                                     case "event":
                                     {
-                                    final C=Get.find<EventController>();
-                                    C.getEvent(searchResult.id);
+                                      Get.toNamed(AppConstants.eventProfilePage,arguments: searchResult.id);
+
                                     }
                                     break;
                                     case "service":
                                     {
-                                    final C=Get.find<ServiceController>();
-                                    C.onSelectService(searchResult.id);
+                                      Get.toNamed(AppConstants.serviceProfilePage,arguments: searchResult.id);
+
                                     }
                                     break;
                                     }

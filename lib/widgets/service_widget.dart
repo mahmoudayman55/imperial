@@ -81,7 +81,7 @@ class ServiceWidget extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            GetBuilder<RegionController>(
+                            GetBuilder<AppDataController>(
                                 builder: (regController) {
 
                               return Text(

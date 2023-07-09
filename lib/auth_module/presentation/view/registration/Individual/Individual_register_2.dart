@@ -4,8 +4,9 @@ import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:imperial/app_init_module/presentation/controller/region_controller.dart';
 import 'package:imperial/app_init_module/presentation/view/onboarding/intro_screen1.dart';
-import 'package:imperial/auth_module/presentation/controller/auth_controller.dart';
+import 'package:imperial/auth_module/presentation/controller/user_join_requests_controller.dart';
 import 'package:imperial/view/home_view.dart';
 import 'package:imperial/view/loading_screen.dart';
 import 'package:imperial/widgets/account_type_selector.dart';
@@ -25,8 +26,12 @@ import '../../../../../app_init_module/domain/entities/group_age_entity.dart';
 import '../../../../../app_init_module/presentation/view/onboarding/intro_screen2.dart';
 import '../../../../../core/utils/custom_colors.dart';
 import '../../../../../core/utils/uk_number_validator.dart';
+import '../../../controller/user_register_controller.dart';
 
-class IndividualRegistration2View extends StatelessWidget {
+class UserRegisterPhaseTwoView extends StatelessWidget {
+
+  final appDataController =Get.find<AppDataController>();
+
   @override
   Widget build(BuildContext context) {
     return Sizer(builder:
@@ -77,12 +82,10 @@ class IndividualRegistration2View extends StatelessWidget {
                         height: height,
                         padding: EdgeInsets.all(10),
                         child:
-                            GetBuilder<AuthController>(builder: (controller) {
+                            GetBuilder<UserRegisterController>(builder: (controller) {
                           return Form(
                             key: controller.userRegisterPhase2FormKey,
-                            child: (controller.loadingAppInit)
-                                ? LoadingScreen(width * 0.1)
-                                : Column(
+                            child: Column(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
                                     crossAxisAlignment:
@@ -113,7 +116,7 @@ class IndividualRegistration2View extends StatelessWidget {
                                         flex: 3,
                                         child: CustomDropdownWidget(
                                             label: 'Group Age',
-                                            items: controller.groupAges,
+                                            items: appDataController.groupAges,initialValue: appDataController.groupAges[0],
                                             onChanged: (item) {
                                               controller
                                                   .onGroupAgeChanged(item);
@@ -123,7 +126,7 @@ class IndividualRegistration2View extends StatelessWidget {
                                         flex: 3,
                                         child: CustomDropdownWidget(
                                             label: 'Speaking Language',
-                                            items: controller.speakingLanguages,
+                                            items: appDataController.speakingLanguages,initialValue: appDataController.speakingLanguages[0],
                                             onChanged: (item) {
                                               controller
                                                   .onSpeakingLanguageChanged(
@@ -134,7 +137,7 @@ class IndividualRegistration2View extends StatelessWidget {
                                         flex: 3,
                                         child: CustomDropdownWidget(
                                             label: 'City',
-                                            items: controller.cities,
+                                            items: appDataController.cities,initialValue: appDataController.cities[0],
                                             onChanged: (item) {
                                               controller.onCityChanged(item);
                                             }),
@@ -143,67 +146,13 @@ class IndividualRegistration2View extends StatelessWidget {
                                         flex: 3,
                                         child: CustomDropdownWidget(
                                             label: 'Region',
-                                            items: controller.regions,
+                                            items:appDataController.regions,initialValue: appDataController.regions[0],
                                             onChanged: (item) {
                                               controller
                                                   .onUserRegionChanged(item);
                                             }),
                                       ),
-                                      // Expanded(
-                                      //   flex: 3,
-                                      //   child:  Column(
-                                      //       crossAxisAlignment: CrossAxisAlignment.start,
-                                      //       children: [
-                                      //         Text(
-                                      //           'Region',
-                                      //           style:
-                                      //               Theme.of(context).textTheme.bodyLarge,
-                                      //         ),
-                                      //         SizedBox(height: Get.height * 0.01),
-                                      //         CustomButton(
-                                      //           height: 6.h,
-                                      //           width: 100.w,
-                                      //           onPressed: () {
-                                      //             showDialog(
-                                      //               context: context,
-                                      //               builder: (BuildContext context) {
-                                      //                 return Dialog(
-                                      //                   child: SizedBox(
-                                      //                     height: 100.h,
-                                      //                     child: Column(
-                                      //                       mainAxisAlignment:
-                                      //                           MainAxisAlignment
-                                      //                               .spaceBetween,
-                                      //                       children: [
-                                      //                         Expanded(
-                                      //                             flex: 10,
-                                      //                             child: onBoardingRegions()),
-                                      //                         Expanded(
-                                      //                           flex: 1,
-                                      //                           child: CustomButton(
-                                      //                             height: 6.h,
-                                      //                             width: 80.w,
-                                      //                             label: "Select",
-                                      //                             onPressed: () {},
-                                      //                             useGradient: false,
-                                      //                           ),
-                                      //                         ),
-                                      //                       ],
-                                      //                     ),
-                                      //                   ),
-                                      //                 );
-                                      //               },
-                                      //             );
-                                      //           },
-                                      //           label: controller.initialized?controller.region.name:'',
-                                      //           color: Colors.white,
-                                      //           textColor: Colors.black,
-                                      //           useGradient: false,
-                                      //           icon: Icons.done,
-                                      //         ),
-                                      //       ],
-                                      //     ),
-                                      //   ),
+
 
                                       Expanded(
                                         flex: 4,

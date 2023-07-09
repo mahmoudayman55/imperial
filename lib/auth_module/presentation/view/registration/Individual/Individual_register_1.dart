@@ -5,7 +5,8 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:imperial/auth_module/presentation/controller/auth_controller.dart';
+import 'package:imperial/auth_module/presentation/controller/user_join_requests_controller.dart';
+import 'package:imperial/auth_module/presentation/controller/user_register_controller.dart';
 import 'package:imperial/widgets/custom_button.dart';
 import 'package:imperial/widgets/custom_text_form_field.dart';
 import 'package:imperial/widgets/sign_with_button.dart';
@@ -16,7 +17,7 @@ import '../../../../../widgets/custom_password_field.dart';
 import '../../../../../widgets/onBoarding_next_Button.dart';
 import 'Individual_register_2.dart';
 
-class IndividualRegister1View extends StatelessWidget {
+class UserRegisterPhaseOneView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Sizer(builder:
@@ -68,7 +69,7 @@ class IndividualRegister1View extends StatelessWidget {
                   SafeArea(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: GetBuilder<AuthController>(builder: (controller) {
+                      child: GetBuilder<UserRegisterController>(builder: (controller) {
                         return Form(
                           key: controller.userRegisterPhase1FormKey,
                           child: SizedBox(height: height,

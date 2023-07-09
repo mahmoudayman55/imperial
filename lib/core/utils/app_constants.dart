@@ -4,7 +4,7 @@ class AppConstants {
   static const notificationServerKey= "key=AAAAd8Gjbfc:APA91bHfGSHWrtxzTKxqZmA_tqjWUxAr8n694_DE3SQPNQ2IE4IGEhxq8OiTFrEOR2AUzpHUKqQ1YSGG_eMjTigaXHQfqLWqsbhWrxSfIdb3z2mvLW162DkQl0TQJqVzl7SoZd1ECbe4";
   //static const baseUrl= "http://d1a4-197-43-173-75.ngrok-free.app";
 
-static const baseUrl= "http://45.90.109.63:8080";
+static const baseUrl= "http://45.90.109.63:8800";
 //static const baseUrl= "http://65db-197-43-148-59.ngrok-free.app";
 //static const baseUrl= "https://maximus.serveo.net/";
   static const initialRoute= "$baseUrl/initial";
@@ -38,7 +38,8 @@ static const baseUrl= "http://45.90.109.63:8080";
   static const userRegisterRoute= "$userRoute/register";
   static const userLoginRoute= "$userRoute/login";
   static const userUpdateTokenRoute= "$userRoute/update";
- static const regRequest= "$baseUrl/register_request";
+ static const regService= "$baseUrl/register_request";
+ static const regCommunity= "$baseUrl/community";
 
 
 
@@ -89,8 +90,28 @@ static const baseUrl= "http://45.90.109.63:8080";
   static const errorStatusCodeKey = "status";
   static const errorKey = "err";
 
-
-
+//app routes
+  static const String accountTypePage = "/accountType";
+  static const String communityRegisterPage = "/community_register";
+  static const String serviceRegisterPage = "/service_register";
+  static const String homePage = "/home";
+  static const String userRegister1Page = "/user_register1";
+  static const String userRegister2Page = "/user_register2";
+  static const String loginPage = "/login";
+  static const String forgotPasswordPage = "/forgot_password";
+  static const String serviceProfilePage = "/serviceProfile";
+  static const String communityProfilePage = "/Community_profile";
+  static const String eventProfilePage = "/event_profile";
+  static const String userProfilePage = "/user_profile";
+  static const String userTicketsPage = "/user_tickets";
+  static const String communityEventsPage = "/community_events";
+  static const String eventTicketsPage = "/event_tickets";
+  static const String personProfilePage = "/person";
+  static const String updateCommunityProfilePage = "/update_community_profile";
+  static const String communityJoinRequestsPage = "/community_join_requests";
+  static const String newEventPage = "/new_event";
+  static const String userJoinRequestPage = "/user_join_requests";
+  static const String newTicketPage = "/new_ticket";
 
   static const String communityIdKey = "id";
   static const String communityNameKey = "name";

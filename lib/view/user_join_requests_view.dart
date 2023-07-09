@@ -3,13 +3,13 @@ import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:imperial/auth_module/presentation/controller/auth_controller.dart';
+import 'package:imperial/auth_module/presentation/controller/user_join_requests_controller.dart';
 import 'package:imperial/community_module/domain/entity/event.dart';
 import 'package:imperial/community_module/presentation/controller/community_controller.dart';
 import 'package:imperial/community_module/presentation/controller/event_controller.dart';
 
 import 'package:imperial/view/home_view.dart';
-import 'package:imperial/view/new_event_view.dart';
+import 'package:imperial/community_module/presentation/view/new_event_view.dart';
 import 'package:imperial/view/loading_screen.dart';
 import 'package:imperial/widgets/account_type_selector.dart';
 import 'package:imperial/widgets/community_join_request.dart';
@@ -57,7 +57,7 @@ class UserJoinRequestsView extends StatelessWidget {
                   )),
               backgroundColor: Colors.grey.shade100,
               body: SafeArea(
-                child: GetBuilder<AuthController>(builder: (controller) {
+                child: GetBuilder<UserJoinRequestsController>(builder: (controller) {
 
                   return controller.gettingUserRequests
                       ? Center(child: LoadingScreen(width * 0.1))

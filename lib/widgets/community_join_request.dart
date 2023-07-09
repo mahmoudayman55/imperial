@@ -2,9 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:imperial/auth_module/presentation/controller/auth_controller.dart';
+import 'package:imperial/auth_module/presentation/controller/user_join_requests_controller.dart';
 import 'package:imperial/community_module/domain/entity/community_join_request.dart';
 import 'package:imperial/community_module/presentation/controller/community_controller.dart';
+import 'package:imperial/core/utils/app_constants.dart';
 import 'package:imperial/widgets/custom_button.dart';
 import 'package:imperial/widgets/custom_cached_network_image.dart';
 import 'package:get/get.dart';
@@ -21,8 +22,7 @@ class CommunityJoinRequestWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(onTap: (){
-      final auth=Get.find<AuthController>();
-      auth.openPersonScreen(request.user.id);
+    Get.toNamed(AppConstants.personProfilePage,arguments: request.user.id);
     },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
@@ -81,7 +81,7 @@ class CommunityJoinRequestWidget extends StatelessWidget {
             ),
             request.status == 2
                 ? Expanded(flex: 1,
-                    child: GetBuilder<CommunityController>(builder: (controller) {
+                    child: GetBuilder<CommunityJoinRequestsController>(builder: (controller) {
                       return Row( mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Container(

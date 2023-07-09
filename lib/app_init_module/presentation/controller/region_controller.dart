@@ -9,9 +9,11 @@ import 'package:imperial/app_init_module/domain/entities/region_entity.dart';
 import 'package:imperial/app_init_module/domain/usecases/get_regions_usecase.dart';
 import 'package:imperial/app_init_module/domain/usecases/get_selected_region_usecase.dart';
 import 'package:imperial/app_init_module/domain/usecases/save_selected_region.dart';
+import 'package:imperial/auth_module/presentation/controller/home_controller.dart';
 import 'package:imperial/community_module/presentation/controller/community_controller.dart';
 import 'package:imperial/community_module/presentation/controller/event_controller.dart';
-import 'package:imperial/service_module/presentation/controller/service_controller.dart';
+import 'package:imperial/core/utils/app_constants.dart';
+import 'package:imperial/service_module/presentation/controller/service_profile_controller.dart';
 import 'package:imperial/view/home_view.dart';
 import 'package:imperial/community_module/domain/entity/event.dart';
 
@@ -19,10 +21,16 @@ import '../../../widgets/custom_snack_bar.dart';
 import '../../data/local_data_source/hive/base_app_iti_local_data_source.dart';
 import '../../data/remote_data_source/app_init_remote_data_source.dart';
 import '../../data/repository/app_init_repository.dart';
+import '../../domain/entities/city.dart';
+import '../../domain/entities/group_age_entity.dart';
+import '../../domain/entities/language_entity.dart';
 import '../../domain/repository/base_app_init_repository.dart';
+import '../../domain/usecases/get_cities_usecase.dart';
+import '../../domain/usecases/get_group_ages_usecase.dart';
+import '../../domain/usecases/get_speaking_languages_usecase.dart';
 import '../../domain/usecases/save_other_region_usecase.dart';
 
-class RegionController extends GetxController {
+class AppDataController extends GetxController {
   int selectedRegionIndex = -1;
   bool loading = false;
   bool error = false;
@@ -50,6 +58,40 @@ class RegionController extends GetxController {
     });
   }
 
+  getGroupAges() async {
+    BaseAppInitRemoteDataSource appInitRemoteDataSource =
+    AppInitRemoteDataSource();
+    BaseAppInitLocalDataSource appInitLocalDataSource =
+    AppInitLocalDataSource();
+    BaseAppInitRepository appInitRepository =
+    AppInitRepository(appInitRemoteDataSource, appInitLocalDataSource);
+    final onBoardings = await GetGroupAgesUseCase(appInitRepository).execute();
+    onBoardings.fold((l) {
+      customSnackBar(
+        title: "error",
+        message: l.message.toString(),
+        successful: false,
+      );
+    }, (r) {
+      (log((r).toString()));
+
+      groupAges = r;
+    });
+  }
+
+
+
+  bool loadingAppInit = false;
+
+  getInitialData() async {
+    await getRegions();
+    await getCurrentRegion();
+  await getSpeakingLanguages();
+    await getCities();
+    await getGroupAges();
+
+
+  }
   final otherRegionFormKey = GlobalKey<FormState>();
 
   updateCurrentRegion(Region region) async {
@@ -71,25 +113,23 @@ class RegionController extends GetxController {
     currentRegion = region;
 
     //
-    final communityController = Get.find<CommunityController>();
+    final homeController = Get.find<HomeController>();
     //
-    communityController.communities = RxList();
-    await communityController.getCommunities();
-    communityController.communities.refresh();
+    homeController.communities = RxList();
+    await homeController.getCommunities();
+    homeController.communities.refresh();
 
-    final eventController = Get.find<EventController>();
     //
-    eventController.setEvents = RxList();
-    await eventController.getEvents();
+    homeController.setEvents = RxList();
+    await homeController.getEvents();
 
-    final serviceController = Get.find<ServiceController>();
     //
-    serviceController.services = RxList();
-    await serviceController.getServices();
-    serviceController.services.refresh();
+    homeController.services = RxList();
+    await homeController.getServices();
+    homeController.services.refresh();
     update();
-    Get.offAllNamed("/home");
-    // communityController.setEvents=RxList();
+  //  Get.offAllNamed("/home");
+    // homeController.setEvents=RxList();
   }
 
   submit() async {
@@ -127,7 +167,7 @@ class RegionController extends GetxController {
                   message: l.message.toString(),
                   successful: false),
               (r) => log("saveOtherRegionResult: success"));
-          Get.offAllNamed("/home");
+          Get.offAllNamed(AppConstants.homePage);
 
         });
       }
@@ -148,7 +188,7 @@ class RegionController extends GetxController {
         update();
       }, (r) {
         log("saveSelectedRegionResult: success");
-        Get.offAllNamed("/home");
+        Get.offAllNamed(AppConstants.homePage);
 
       });
     }
@@ -167,13 +207,55 @@ class RegionController extends GetxController {
     }
     update();
   }
-
+  getSpeakingLanguages() async {
+    BaseAppInitRemoteDataSource appInitRemoteDataSource =
+    AppInitRemoteDataSource();
+    BaseAppInitLocalDataSource appInitLocalDataSource =
+    AppInitLocalDataSource();
+    BaseAppInitRepository appInitRepository =
+    AppInitRepository(appInitRemoteDataSource, appInitLocalDataSource);
+    final onBoardings =
+    await GetSpeakingLanguagesUseCase(appInitRepository).execute();
+    onBoardings.fold((l) {
+      customSnackBar(
+        title: "error",
+        message: l.message.toString(),
+        successful: false,
+      );
+    }, (r) {
+      speakingLanguages = r;
+    });
+  }
+  late List<SpeakingLanguage> speakingLanguages;
+  late List<City> cities;
+  late List<GroupAge> groupAges;
+  getCities() async {
+    BaseAppInitRemoteDataSource appInitRemoteDataSource =
+    AppInitRemoteDataSource();
+    BaseAppInitLocalDataSource appInitLocalDataSource =
+    AppInitLocalDataSource();
+    BaseAppInitRepository appInitRepository =
+    AppInitRepository(appInitRemoteDataSource, appInitLocalDataSource);
+    final onBoardings = await GetCitiesUseCase(appInitRepository).execute();
+    onBoardings.fold((l) {
+      customSnackBar(
+        title: "error",
+        message: l.message.toString(),
+        successful: false,
+      );
+    }, (r) {
+      cities = r;
+    });
+  }
   final RxList<Region> regions = <Region>[].obs;
 
   @override
   void onInit() {
-    getRegions();
-    getCurrentRegion();
+    groupAges = <GroupAge>[].obs;
+    cities = <City>[].obs;
+    speakingLanguages = <SpeakingLanguage>[].obs;
+getInitialData();
+
     super.onInit();
   }
 
@@ -201,6 +283,7 @@ class RegionController extends GetxController {
 
         regions.assignAll(r);
         regions.refresh();
+        log("length from app data ${regions.length.toString()}");
         loading = false;
         error = false;
         update();

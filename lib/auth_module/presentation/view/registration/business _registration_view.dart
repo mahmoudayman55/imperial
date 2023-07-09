@@ -3,6 +3,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:imperial/auth_module/presentation/controller/service_register_controller.dart';
 import 'package:imperial/widgets/account_type_selector.dart';
 import 'package:imperial/widgets/custom_button.dart';
 import 'package:imperial/widgets/custom_text_form_field.dart';
@@ -15,26 +16,22 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../app_init_module/presentation/controller/region_controller.dart';
 import '../../../../core/utils/custom_colors.dart';
 import '../../../../core/utils/uk_number_validator.dart';
 import '../../../../view/loading_screen.dart';
 import '../../../../widgets/custom_drop_down.dart';
-import '../../controller/auth_controller.dart';
+import '../../controller/user_join_requests_controller.dart';
 
 
-class BusinessRegistrationView extends StatefulWidget {
-  @override
-  State<BusinessRegistrationView> createState() =>
-      _BusinessRegistrationViewState();
-}
 
-class _BusinessRegistrationViewState extends State<BusinessRegistrationView> {
-  List<String> items = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
-  String selectedItem = 'Option 1';
+
+class BusinessRegistrationView extends StatelessWidget {
+  final regionController=Get.find<AppDataController>();
+
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController _passwordController = TextEditingController();
     return Sizer(builder: (BuildContext context, Orientation orientation, DeviceType deviceType) {
       double width = 100.w;
       double height = 100.h;
@@ -81,9 +78,9 @@ class _BusinessRegistrationViewState extends State<BusinessRegistrationView> {
                 child: Container(
                   height: height ,
                   padding: EdgeInsets.all(10),
-                  child: GetBuilder<AuthController>(
+                  child: GetBuilder<ServiceRegisterController>(
                       builder: (controller) {
-                        return controller.gettingServiceRegions?LoadingScreen(width * 0.1): Form(
+                        return regionController.regions.isEmpty?LoadingScreen(width * 0.1): Form(
                           key: controller.registerServiceFormKey,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -93,13 +90,13 @@ class _BusinessRegistrationViewState extends State<BusinessRegistrationView> {
                               Expanded(
                                 flex: 2,
                                 child: CustomTextFormField( validator: (v){
-                                  if(controller.serviceOwnerNameController.text.isEmpty){
+                                  if(controller.ownerNameController.text.isEmpty){
                                     return "This field cannot be empty";
                                   }
                                   return null;
                                 },
                                   textColor: Colors.white,
-                                  controller: controller.serviceOwnerNameController,
+                                  controller: controller.ownerNameController,
                                   context: context,
                                   label: 'User Name',
                                 ),
@@ -107,26 +104,26 @@ class _BusinessRegistrationViewState extends State<BusinessRegistrationView> {
                               Expanded(
                                 flex: 2,
                                 child: CustomTextFormField( validator: (v){
-                                  if(controller.serviceNameController.text.isEmpty){
+                                  if(controller.nameController.text.isEmpty){
                                     return "This field cannot be empty";
                                   }
                                   return null;
                                 },
                                   textColor: Colors.white,
-                                  controller: controller.serviceNameController,
+                                  controller: controller.nameController,
                                   context: context,
                                   label: 'Service Name',
                                 ),
                               ),           Expanded(
                                 flex: 2,
                                 child: CustomTextFormField( validator: (v){
-                                  if(controller.serviceAddressController.text.isEmpty){
+                                  if(controller.addressController.text.isEmpty){
                                     return "This field cannot be empty";
                                   }
                                   return null;
                                 },
                                   textColor: Colors.white,
-                                  controller: controller.serviceAddressController,
+                                  controller: controller.addressController,
                                   context: context,
                                   label: 'Address',
                                 ),
@@ -135,11 +132,11 @@ class _BusinessRegistrationViewState extends State<BusinessRegistrationView> {
                                 flex: 2,
                                 child:    CustomTextFormField(keyboardType: TextInputType.emailAddress,
                                   controller:
-                                  controller.serviceEmailController,
+                                  controller.emailController,
                                   validator: (value) {
 
-                                    if ( controller.serviceEmailController.text.isEmpty ||
-                                        !EmailValidator.validate(controller.serviceEmailController.text )) {
+                                    if ( controller.emailController.text.isEmpty ||
+                                        !EmailValidator.validate(controller.emailController.text )) {
                                       return "Invalid email address";
                                     }
                                     return null;
@@ -167,14 +164,14 @@ class _BusinessRegistrationViewState extends State<BusinessRegistrationView> {
                                     Expanded(flex: 10,
                                       child: CustomTextFormField(keyboardType: TextInputType.phone,
                                         controller:controller
-                                            .servicePhoneController,
+                                            .phoneController,
                                         context: context,
                                         label: "phone",
                                textColor: Colors.white,
                                         validator: (v) {
                                           if (!isUkPhoneNumber(
                                               "+44${controller
-                                                  .servicePhoneController
+                                                  .phoneController
                                                   .text}")) {
                                             return "invalid phone number";
                                           }
@@ -189,29 +186,29 @@ class _BusinessRegistrationViewState extends State<BusinessRegistrationView> {
                                 flex: 2,
                                 child: CustomDropdownWidget(
                                     label: 'Region',
-                                    items: controller.regions,
+                                    items: regionController.regions,initialValue: regionController.regions[0],
                                     onChanged: (item) {
-                                      controller.onServiceRegionChanged(item);
+                                      controller.onRegionChanged(item);
                                     }),
                               ),
                               Expanded(
                                 flex: 2,
                                 child: CustomTextFormField(
                                   textColor: Colors.white,
-                                  controller: controller.serviceWebsiteController,
+                                  controller: controller.websiteController,
                                   context: context,
                                   label: 'Web URL (optional)'
                                 ),
                               ),    Expanded(
                                 flex: 3,
                                 child: CustomTextFormField( validator: (v){
-                                  if(controller.serviceAboutController.text.isEmpty){
+                                  if(controller.aboutController.text.isEmpty){
                                     return "This field cannot be empty";
                                   }
                                   return null;
                                 },
                                   textColor: Colors.white,
-                                  controller: controller.serviceAboutController,
+                                  controller: controller.aboutController,
                                   context: context,
                                   label: 'About your service',maxLines: 4,
                                 ),
@@ -239,252 +236,12 @@ class _BusinessRegistrationViewState extends State<BusinessRegistrationView> {
             ),
           ],
         ),
-      ):Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar:  AppBar(
-            leadingWidth: 8.w,
-            shadowColor: Colors.transparent,
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            leading: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 1.w),
-              child: NextButton(
-                iconSize: 3,
-                onPressed: () {},
-                icon: Icons.arrow_back_ios_rounded,
-              ),
-            )),
-        backgroundColor: Colors.grey.shade100,
-        body: Stack(
-          fit: StackFit.expand,
-          children: [
-            Image.asset(
-              'assets/images/authbg.jpg',
-              fit: BoxFit.cover,
-            ),
-            BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-              child: Container(
-                width: width,
-                height: height,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.black, Colors.transparent],
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                  ),
-                ),
-              ),
-            ),
-            Center(
-              child: SingleChildScrollView(
-                child: Container(width: width*0.6,
-                  height: height * 0.9,
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Image.asset(
-                          'assets/images/logo.png',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: CustomTextFormField(
-                          context: context,
-                          label: 'Full Name',
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: CustomTextFormField(
-                          context: context,
-                          label: 'Business Name',
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: CustomTextFormField(
-                          context: context,
-                          label: 'Email',
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Phone',
-                              style: Theme.of(context).textTheme.bodyLarge,
-                            ),                SizedBox(height: Get.height*0.01),
+      ):
 
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.3),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: InternationalPhoneNumberInput(
-                                selectorTextStyle: Theme.of(context)
-                                    .textTheme
-                                    .displayLarge!
-                                    .copyWith(color: Colors.black54),
-                                textStyle: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .copyWith(color: Colors.white),
-                                inputDecoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: 'Phone Number',
-                                  hintStyle: TextStyle(
-                                    color: Colors.grey[400],
-                                  ),
-                                ),
-                                onInputChanged: (PhoneNumber value) {},
-                                selectorButtonOnErrorPadding: 8,
-                                selectorConfig: SelectorConfig(
-                                    trailingSpace: false,
-                                    selectorType:
-                                    PhoneInputSelectorType.DROPDOWN),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Business Category',
-                              style: Theme.of(context).textTheme.bodyLarge,
-                            ), SizedBox(height: Get.height*0.01),
-                            Container(
-                              width: width,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: DropdownButton<String>(
-                                  underline: SizedBox(),
-                                  dropdownColor: Colors.white,
-                                  isExpanded: true,
-                                  iconEnabledColor: Colors.black,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .displayMedium!
-                                      .copyWith(color: Colors.white),
-                                  value: selectedItem,
-                                  onChanged: (String? newValue) {
-                                    setState(() {
-                                      selectedItem = newValue!;
-                                    });
-                                  },
-                                  items: items.map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(
-                                            value,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .displayMedium!
-                                                .copyWith(color: Colors.black),
-                                          ),
-                                        );
-                                      }).toList(),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: height*0.02,),
-                      Expanded(
-                        flex: 2,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Region',
-                              style: Theme.of(context).textTheme.bodyLarge,
-                            ), SizedBox(height: Get.height*0.01),
-                            CustomButton(
-                              height: height * 0.06,
-                              width: width,
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return Dialog(
-                                      child: SizedBox(
-                                        height: height * 0.6,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Expanded(
-                                                flex: 10,
-                                                child: RegionSelector()),
-                                            Expanded(
-                                              flex: 1,
-                                              child: CustomButton(
-                                                height: height * 0.06,
-                                                width: width * 0.8,
-                                                label: "Select",
-                                                onPressed: () {},
-                                                useGradient: false,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              },                              label: 'West Midland',
 
-                              color: Colors.white,
-                              textColor: Colors.black,
-                              useGradient: false,
-                              icon: Icons.done,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: CustomTextFormField(
-                          context: context,
-                          label: 'About Your Service',
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: CustomButton(
-                          height: height * 0.06,
-                          width: width,
-                          onPressed: () {},
-                          label: 'Finish',
-                          color: CustomColors.green,
-                          icon: Icons.done,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
+
+     SizedBox();
+      ///Todo:tablet
     });
   }
 }

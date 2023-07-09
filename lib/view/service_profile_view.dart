@@ -14,7 +14,7 @@ import '../app_init_module/presentation/controller/region_controller.dart';
 import '../core/utils/custom_colors.dart';
 import '../service_module/data/model/service_item_model.dart';
 import '../service_module/domain/entity/service_item.dart';
-import '../service_module/presentation/controller/service_controller.dart';
+import '../service_module/presentation/controller/service_profile_controller.dart';
 import '../widgets/community_admin_widget.dart';
 import '../widgets/event_slider.dart';
 import 'package:sizer/sizer.dart';
@@ -50,11 +50,13 @@ class ServiceProfileView extends StatelessWidget {
                 ),
               )),
           backgroundColor: Colors.grey.shade100,
-          body: GetBuilder<ServiceController>(
+          body: GetBuilder<ServiceProfileController>(
             builder: (controller) {
-              return controller.gettingService
-                ? LoadingScreen(width * 0.1)
-                : Column(
+              return  controller.gettingService
+                  ? Center(
+                child: LoadingScreen(width * 0.1),
+              )
+                  : Column(
               children: [
                 Expanded(
                   flex: 16,
@@ -133,7 +135,7 @@ class ServiceProfileView extends StatelessWidget {
                                           crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                           children: [
-                                            GetBuilder<RegionController>(
+                                            GetBuilder<AppDataController>(
                                                 builder: (regController) {
                                                   return Text(
                                                     regController.regions
@@ -153,12 +155,10 @@ class ServiceProfileView extends StatelessWidget {
                                                   );
                                                 }),
                                             SizedBox(
-                                              width: 0.4 * width,
+                                              width: 0.65 * width,
                                               child: Text(
                                                 controller.selectedService
                                                     .address,
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 1,
                                                 style: Theme
                                                     .of(context)
                                                     .textTheme

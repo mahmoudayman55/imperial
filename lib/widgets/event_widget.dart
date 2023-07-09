@@ -1,13 +1,16 @@
 import 'dart:developer';
+import 'package:imperial/auth_module/presentation/controller/home_controller.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:imperial/community_module/presentation/controller/event_controller.dart';
-import 'package:imperial/view/event_view.dart';
+import 'package:imperial/community_module/presentation/view/event_profile_view.dart';
 import 'package:imperial/widgets/custom_cached_network_image.dart';
 import 'package:sizer/sizer.dart';
 import 'package:get/get.dart';
 import 'package:imperial/community_module/domain/entity/event.dart';
+
+import '../core/utils/app_constants.dart';
 
 class EventWidget extends StatelessWidget {
   final double width;
@@ -28,11 +31,11 @@ class EventWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<EventController>(
+    return GetBuilder<HomeController>(
 
       builder: (controller) {
         return GestureDetector(
-          onTap: ()=>controller.getEvent(event.id),
+          onTap: ()=>  Get.toNamed(AppConstants.eventProfilePage,arguments: event.id),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Stack(

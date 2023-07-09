@@ -3,11 +3,14 @@ import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:imperial/app_init_module/presentation/controller/region_controller.dart';
 import 'package:imperial/community_module/domain/entity/event.dart';
+import 'package:imperial/community_module/presentation/controller/community_events_controller.dart';
 import 'package:imperial/community_module/presentation/controller/event_controller.dart';
+import 'package:imperial/core/utils/app_constants.dart';
 
 import 'package:imperial/view/home_view.dart';
-import 'package:imperial/view/new_event_view.dart';
+import 'package:imperial/community_module/presentation/view/new_event_view.dart';
 import 'package:imperial/view/loading_screen.dart';
 import 'package:imperial/widgets/account_type_selector.dart';
 import 'package:imperial/widgets/custom_button.dart';
@@ -23,15 +26,11 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../core/utils/custom_colors.dart';
-import '../auth_module/presentation/controller/auth_controller.dart';
+import '../auth_module/presentation/controller/user_join_requests_controller.dart';
 import '../widgets/event_table.dart';
 
-class CommunityEventsView extends StatefulWidget {
-  @override
-  State<CommunityEventsView> createState() => _CommunityEventsViewState();
-}
 
-class _CommunityEventsViewState extends State<CommunityEventsView> {
+class CommunityEventsView extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Sizer(builder:
@@ -43,10 +42,10 @@ class _CommunityEventsViewState extends State<CommunityEventsView> {
           ? Scaffold(
               floatingActionButton: FloatingActionButton(
                 onPressed: () async {
-                  final speakingLanguageController = Get.find<AuthController>();
-                  await speakingLanguageController.getSpeakingLanguages();
+                  // final appDataController = Get.find<AppDataController>();
+                  // await appDataController.getSpeakingLanguages();
 
-                  Get.to(NewEventView());
+                  Get.toNamed(AppConstants.newEventPage);
                 },
                 backgroundColor: CustomColors.red,
                 child: Icon(
@@ -72,7 +71,7 @@ class _CommunityEventsViewState extends State<CommunityEventsView> {
                   )),
               backgroundColor: Colors.grey.shade100,
               body: SafeArea(
-                child: GetBuilder<EventController>(builder: (controller) {
+                child: GetBuilder<CommunityEventsController>(builder: (controller) {
                   return controller.gettingCommunityEvents
                       ? LoadingScreen(width * 0.1)
                       : (controller.communityEvents.isNotEmpty

@@ -83,9 +83,19 @@ return Right(currentUser);
   }
 
   @override
-  Future<Either<ErrorMessageModel, String>> sendRegistrationRequest(RegistrationRequest registrationRequest) async {
+  Future<Either<ErrorMessageModel, String>> sendServiceRegistrationRequest(RegistrationRequest registrationRequest) async {
     try {
-      final result =await authRemoteDataSource.sendRegistrationRequest(registrationRequest);
+      final result =await authRemoteDataSource.sendServiceRegistrationRequest(registrationRequest);
+
+      return Right(result);
+    }
+    on ServerException catch (e) {
+      return Left(e.errorMessageModel);
+    }
+  }  @override
+  Future<Either<ErrorMessageModel, String>> sendCommunityRegistrationRequest(RegistrationRequest registrationRequest) async {
+    try {
+      final result =await authRemoteDataSource.sendCommunityRegistrationRequest(registrationRequest);
 
       return Right(result);
     }

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:imperial/auth_module/data/models/user_ticket_model.dart';
+import 'package:imperial/auth_module/presentation/controller/home_controller.dart';
 import 'package:imperial/widgets/custom_snack_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +11,13 @@ import 'package:imperial/widgets/custom_button.dart';
 import 'package:imperial/widgets/custom_cached_network_image.dart';
 import 'package:get/get.dart';
 import '../community_module/presentation/controller/event_controller.dart';
+import '../community_module/presentation/controller/user_ticket_requests_controller.dart';
+import '../core/utils/app_constants.dart';
 import '../core/utils/custom_colors.dart';
 
 class UserTicketRequestWidget extends StatelessWidget {
-  final eventC = Get.find<EventController>();
+  final eventC = Get.find<UserTicketRequestsController>();
+  final homeController = Get.find<HomeController>();
   final UserTicketModel request;
   final double width;
   final double height;
@@ -125,7 +129,7 @@ class UserTicketRequestWidget extends StatelessWidget {
                                                   text:
                                                       'Kids (${request.kidAttendees.length})'),
                                             ]),
-                                        GetBuilder<EventController>(
+                                        GetBuilder<NewTicketController>(
                                             builder: (c) {
                                           return SizedBox(
                                             height: height * 1.8,
@@ -510,7 +514,8 @@ class UserTicketRequestWidget extends StatelessWidget {
                         .copyWith(color: CustomColors.red),
                   )),
               TextButton(
-                  onPressed: () => eventC.getEvent(request.event.id),
+                  onPressed: () =>Get.toNamed(AppConstants.eventProfilePage,arguments: request.event.id)
+                  ,
                   child: Text(
                     "Event",
                     style: Theme.of(context)

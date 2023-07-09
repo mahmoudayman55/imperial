@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:imperial/auth_module/presentation/controller/auth_controller.dart';
+import 'package:imperial/auth_module/presentation/controller/user_join_requests_controller.dart';
 import 'package:imperial/community_module/presentation/controller/event_controller.dart';
+import 'package:imperial/community_module/presentation/controller/event_tickets_controller.dart';
 import 'package:imperial/widgets/custom_snack_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:imperial/community_module/presentation/controller/community_cont
 import 'package:imperial/widgets/custom_button.dart';
 import 'package:imperial/widgets/custom_cached_network_image.dart';
 import 'package:get/get.dart';
+import '../core/utils/app_constants.dart';
 import '../core/utils/custom_colors.dart';
 import '../view/loading_screen.dart';
 
@@ -18,8 +20,6 @@ class CommunityTicketRequestWidget extends StatelessWidget {
   final double width;
   final int eventId;
   final double height;
-final authC=Get.find<AuthController>();
-final eventC=Get.find<EventController>();
   CommunityTicketRequestWidget(
       {required this.request,
       required this.width,
@@ -78,7 +78,7 @@ final eventC=Get.find<EventController>();
               request.status == 2
                   ? Expanded(
                       flex: 1,
-                      child: GetBuilder<EventController>(builder: (controller) {
+                      child: GetBuilder<EventTicketsController>(builder: (controller) {
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
@@ -161,257 +161,254 @@ final eventC=Get.find<EventController>();
                                                   text:
                                                       'Kids (${request.kidAttendees.length})'),
                                             ]),
-                                        GetBuilder<EventController>(
-                                            builder: (c) {
-                                          return SizedBox(height: height*1.8,
+                                        SizedBox(height: height*1.8,
 
-                                            child: TabBarView(
-                                              physics:
-                                                  NeverScrollableScrollPhysics(),
-                                              children: [
-                                                request.adultAttendees.isEmpty
-                                                    ? Center(
-                                                        child: Text(
-                                                          "No adult attendees",
-                                                          style: Theme.of(
+                                          child: TabBarView(
+                                            physics:
+                                            NeverScrollableScrollPhysics(),
+                                            children: [
+                                              request.adultAttendees.isEmpty
+                                                  ? Center(
+                                                child: Text(
+                                                  "No adult attendees",
+                                                  style: Theme.of(
+                                                      context)
+                                                      .textTheme
+                                                      .displayMedium!
+                                                      .copyWith(
+                                                      color: Colors
+                                                          .black),
+                                                ),
+                                              )
+                                                  : SingleChildScrollView(
+                                                scrollDirection:
+                                                Axis.vertical,
+                                                child: SizedBox(
+                                                  width: width,
+                                                  child: DataTable(
+                                                    columnSpacing:
+                                                    width * 0.02,
+                                                    headingRowColor:
+                                                    MaterialStateColor
+                                                        .resolveWith(
+                                                            (states) =>
+                                                        CustomColors.red),
+                                                    columns: [
+                                                      DataColumn(
+                                                          label: Text(
+                                                            '#',
+                                                            style: Theme.of(
+                                                                context)
+                                                                .textTheme
+                                                                .bodyLarge,
+                                                          )),
+                                                      DataColumn(
+                                                          label: Text(
+                                                            'Name',
+                                                            style: Theme.of(
+                                                                context)
+                                                                .textTheme
+                                                                .bodyLarge,
+                                                          )),
+                                                    ],
+                                                    rows: (request
+                                                        .adultAttendees)
+                                                        .asMap()
+                                                        .entries
+                                                        .map((entry) {
+                                                      final index =
+                                                          entry.key;
+
+                                                      final isOddRow =
+                                                          index % 2 ==
+                                                              1;
+
+                                                      final rowColor =
+                                                      isOddRow
+                                                          ? Colors
+                                                          .grey
+                                                          .shade300
+                                                          : Colors
+                                                          .white;
+
+                                                      return DataRow(
+                                                        color: MaterialStateProperty
+                                                            .resolveWith<
+                                                            Color>(
+                                                                (states) =>
+                                                            rowColor),
+                                                        cells: [
+                                                          DataCell(
+                                                            Text(
+                                                              (index +
+                                                                  1)
+                                                                  .toString(),
+                                                              style: Theme.of(
                                                                   context)
-                                                              .textTheme
-                                                              .displayMedium!
-                                                              .copyWith(
-                                                                  color: Colors
-                                                                      .black),
-                                                        ),
-                                                      )
-                                                    : SingleChildScrollView(
-                                                        scrollDirection:
-                                                            Axis.vertical,
-                                                        child: SizedBox(
-                                                          width: width,
-                                                          child: DataTable(
-                                                            columnSpacing:
-                                                                width * 0.02,
-                                                            headingRowColor:
-                                                                MaterialStateColor
-                                                                    .resolveWith(
-                                                                        (states) =>
-                                                                            CustomColors.red),
-                                                            columns: [
-                                                              DataColumn(
-                                                                  label: Text(
-                                                                '#',
-                                                                style: Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .bodyLarge,
-                                                              )),
-                                                              DataColumn(
-                                                                  label: Text(
-                                                                'Name',
-                                                                style: Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .bodyLarge,
-                                                              )),
-                                                            ],
-                                                            rows: (request
-                                                                    .adultAttendees)
-                                                                .asMap()
-                                                                .entries
-                                                                .map((entry) {
-                                                              final index =
-                                                                  entry.key;
-
-                                                              final isOddRow =
-                                                                  index % 2 ==
-                                                                      1;
-
-                                                              final rowColor =
-                                                                  isOddRow
-                                                                      ? Colors
-                                                                          .grey
-                                                                          .shade300
-                                                                      : Colors
-                                                                          .white;
-
-                                                              return DataRow(
-                                                                color: MaterialStateProperty
-                                                                    .resolveWith<
-                                                                            Color>(
-                                                                        (states) =>
-                                                                            rowColor),
-                                                                cells: [
-                                                                  DataCell(
-                                                                    Text(
-                                                                      (index +
-                                                                              1)
-                                                                          .toString(),
-                                                                      style: Theme.of(
-                                                                              context)
-                                                                          .textTheme
-                                                                          .bodyLarge!
-                                                                          .copyWith(
-                                                                              color: Colors.black),
-                                                                    ),
-                                                                  ),
-                                                                  DataCell(
-                                                                    Text(
-                                                                      request
-                                                                          .adultAttendees[
-                                                                              index]
-                                                                          .name,
-                                                                      style: Theme.of(
-                                                                              context)
-                                                                          .textTheme
-                                                                          .bodyLarge!
-                                                                          .copyWith(
-                                                                              color: Colors.black),
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              );
-                                                            }).toList(),
+                                                                  .textTheme
+                                                                  .bodyLarge!
+                                                                  .copyWith(
+                                                                  color: Colors.black),
+                                                            ),
                                                           ),
-                                                        ),
-                                                      ),
-                                                request.kidAttendees.isEmpty
-                                                    ? Center(
-                                                        child: Text(
-                                                          "No adult attendees",
-                                                          style: Theme.of(
+                                                          DataCell(
+                                                            Text(
+                                                              request
+                                                                  .adultAttendees[
+                                                              index]
+                                                                  .name,
+                                                              style: Theme.of(
                                                                   context)
-                                                              .textTheme
-                                                              .displayMedium!
-                                                              .copyWith(
-                                                                  color: Colors
-                                                                      .black),
-                                                        ),
-                                                      )
-                                                    : SingleChildScrollView(
-                                                        scrollDirection:
-                                                            Axis.vertical,
-                                                        child: SizedBox(
-                                                          width: width,
-                                                          child: DataTable(
-                                                            columnSpacing:
-                                                                width * 0.02,
-                                                            headingRowColor:
-                                                                MaterialStateColor
-                                                                    .resolveWith(
-                                                                        (states) =>
-                                                                            CustomColors.red),
-                                                            columns: [
-                                                              DataColumn(
-                                                                  label: Text(
-                                                                '#',
-                                                                style: Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .bodyLarge,
-                                                              )),
-                                                              DataColumn(
-                                                                  label: Text(
-                                                                'Name',
-                                                                style: Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .bodyLarge,
-                                                              )),
-                                                              DataColumn(
-                                                                  label: Text(
-                                                                'age',
-                                                                style: Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .bodyLarge,
-                                                              )),
-                                                            ],
-                                                            rows: request
-                                                                .kidAttendees
-                                                                .asMap()
-                                                                .entries
-                                                                .map((entry) {
-                                                              final index =
-                                                                  entry.key;
-
-                                                              final event =
-                                                                  entry.value;
-
-                                                              final isOddRow =
-                                                                  index % 2 ==
-                                                                      1;
-
-                                                              final rowColor =
-                                                                  isOddRow
-                                                                      ? Colors
-                                                                          .grey
-                                                                          .shade300
-                                                                      : Colors
-                                                                          .white;
-
-                                                              return DataRow(
-                                                                color: MaterialStateProperty
-                                                                    .resolveWith<
-                                                                            Color>(
-                                                                        (states) =>
-                                                                            rowColor),
-                                                                cells: [
-                                                                  DataCell(
-                                                                    Text(
-                                                                      (index +
-                                                                              1)
-                                                                          .toString(),
-                                                                      style: Theme.of(
-                                                                              context)
-                                                                          .textTheme
-                                                                          .bodyLarge!
-                                                                          .copyWith(
-                                                                              color: Colors.black),
-                                                                    ),
-                                                                  ),
-                                                                  DataCell(
-                                                                    Text(
-                                                                      request
-                                                                          .kidAttendees[
-                                                                              index]
-                                                                          .name,
-                                                                      style: Theme.of(
-                                                                              context)
-                                                                          .textTheme
-                                                                          .bodyLarge!
-                                                                          .copyWith(
-                                                                              color: Colors.black),
-                                                                    ),
-                                                                  ),
-                                                                  DataCell(
-                                                                    Text(
-                                                                      request
-                                                                          .kidAttendees[
-                                                                              index]
-                                                                          .age
-                                                                          .toString(),
-                                                                      style: Theme.of(
-                                                                              context)
-                                                                          .textTheme
-                                                                          .bodyLarge!
-                                                                          .copyWith(
-                                                                              color: Colors.black),
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              );
-                                                            }).toList(),
+                                                                  .textTheme
+                                                                  .bodyLarge!
+                                                                  .copyWith(
+                                                                  color: Colors.black),
+                                                            ),
                                                           ),
-                                                        ),
-                                                      ),
-                                              ],
-                                            ),
-                                          );
-                                        }),
+                                                        ],
+                                                      );
+                                                    }).toList(),
+                                                  ),
+                                                ),
+                                              ),
+                                              request.kidAttendees.isEmpty
+                                                  ? Center(
+                                                child: Text(
+                                                  "No adult attendees",
+                                                  style: Theme.of(
+                                                      context)
+                                                      .textTheme
+                                                      .displayMedium!
+                                                      .copyWith(
+                                                      color: Colors
+                                                          .black),
+                                                ),
+                                              )
+                                                  : SingleChildScrollView(
+                                                scrollDirection:
+                                                Axis.vertical,
+                                                child: SizedBox(
+                                                  width: width,
+                                                  child: DataTable(
+                                                    columnSpacing:
+                                                    width * 0.02,
+                                                    headingRowColor:
+                                                    MaterialStateColor
+                                                        .resolveWith(
+                                                            (states) =>
+                                                        CustomColors.red),
+                                                    columns: [
+                                                      DataColumn(
+                                                          label: Text(
+                                                            '#',
+                                                            style: Theme.of(
+                                                                context)
+                                                                .textTheme
+                                                                .bodyLarge,
+                                                          )),
+                                                      DataColumn(
+                                                          label: Text(
+                                                            'Name',
+                                                            style: Theme.of(
+                                                                context)
+                                                                .textTheme
+                                                                .bodyLarge,
+                                                          )),
+                                                      DataColumn(
+                                                          label: Text(
+                                                            'age',
+                                                            style: Theme.of(
+                                                                context)
+                                                                .textTheme
+                                                                .bodyLarge,
+                                                          )),
+                                                    ],
+                                                    rows: request
+                                                        .kidAttendees
+                                                        .asMap()
+                                                        .entries
+                                                        .map((entry) {
+                                                      final index =
+                                                          entry.key;
+
+                                                      final event =
+                                                          entry.value;
+
+                                                      final isOddRow =
+                                                          index % 2 ==
+                                                              1;
+
+                                                      final rowColor =
+                                                      isOddRow
+                                                          ? Colors
+                                                          .grey
+                                                          .shade300
+                                                          : Colors
+                                                          .white;
+
+                                                      return DataRow(
+                                                        color: MaterialStateProperty
+                                                            .resolveWith<
+                                                            Color>(
+                                                                (states) =>
+                                                            rowColor),
+                                                        cells: [
+                                                          DataCell(
+                                                            Text(
+                                                              (index +
+                                                                  1)
+                                                                  .toString(),
+                                                              style: Theme.of(
+                                                                  context)
+                                                                  .textTheme
+                                                                  .bodyLarge!
+                                                                  .copyWith(
+                                                                  color: Colors.black),
+                                                            ),
+                                                          ),
+                                                          DataCell(
+                                                            Text(
+                                                              request
+                                                                  .kidAttendees[
+                                                              index]
+                                                                  .name,
+                                                              style: Theme.of(
+                                                                  context)
+                                                                  .textTheme
+                                                                  .bodyLarge!
+                                                                  .copyWith(
+                                                                  color: Colors.black),
+                                                            ),
+                                                          ),
+                                                          DataCell(
+                                                            Text(
+                                                              request
+                                                                  .kidAttendees[
+                                                              index]
+                                                                  .age
+                                                                  .toString(),
+                                                              style: Theme.of(
+                                                                  context)
+                                                                  .textTheme
+                                                                  .bodyLarge!
+                                                                  .copyWith(
+                                                                  color: Colors.black),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    }).toList(),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )
                                       ],
                                     ),
                                   ),
                                 ),
-                                request.bankHolder != null
+                                request.bankHolder!.length!=0
                                     ? Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
@@ -546,7 +543,8 @@ final eventC=Get.find<EventController>();
                         .copyWith(color: Colors.lightGreen),
                   )),
               TextButton(
-                  onPressed: ()=>authC.openPersonScreen(request.user.id),
+                  onPressed: ()=>    Get.toNamed(AppConstants.personProfilePage,arguments: request.user.id)
+                  ,
                   child: Text(
                     "visit profile",
                     style: Theme.of(context)

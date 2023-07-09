@@ -27,10 +27,11 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../core/utils/custom_colors.dart';
-import '../auth_module/presentation/controller/auth_controller.dart';
+import '../auth_module/presentation/controller/user_join_requests_controller.dart';
+import '../community_module/presentation/controller/user_ticket_requests_controller.dart';
 
 class UserTicketRequestsView extends StatelessWidget {
-  final authController = Get.find<AuthController>();
+  final userTicketsController = Get.find<UserTicketRequestsController>();
 
   UserTicketRequestsView({super.key});
 
@@ -67,9 +68,9 @@ class UserTicketRequestsView extends StatelessWidget {
                         EdgeInsets.symmetric(horizontal: 10, vertical: 10),
 
                     child: Obx(
-                      () => authController.gettingUserTicketRequests.value
+                      () => userTicketsController.gettingUserTicketRequests.value
                           ? LoadingScreen(width * 0.1)
-                          : authController
+                          : userTicketsController
                           .userTicketRequests.isEmpty
                           ? Center(
                             child: Text(
@@ -82,12 +83,12 @@ class UserTicketRequestsView extends StatelessWidget {
                           )
                           :ListView.builder(shrinkWrap: true,
                               itemCount:
-                                  authController.userTicketRequests.length,
+                                  userTicketsController.userTicketRequests.length,
                               itemBuilder: (context, index) {
                                 return Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child:  UserTicketRequestWidget(
-                                          request: authController
+                                          request: userTicketsController
                                               .userTicketRequests[index],
                                           width: width,
                                           height: height * 0.2),

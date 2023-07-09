@@ -9,7 +9,7 @@ import 'package:imperial/auth_module/data/models/notification_model.dart';
 import 'package:imperial/auth_module/data/remote_data_source/auth_remote_data_source.dart';
 import 'package:imperial/auth_module/data/repository/auth_repository.dart';
 import 'package:imperial/auth_module/domain/usecase/send_noti_use_case.dart';
-import 'package:imperial/auth_module/presentation/controller/auth_controller.dart';
+import 'package:imperial/auth_module/presentation/controller/user_join_requests_controller.dart';
 import 'package:imperial/auth_module/presentation/controller/notofication_controller.dart';
 import 'package:imperial/community_module/data/model/community_card_model.dart';
 import 'package:imperial/community_module/data/model/community_model.dart';
@@ -34,6 +34,7 @@ import '../../../app_init_module/data/repository/app_init_repository.dart';
 import '../../../app_init_module/domain/entities/region_entity.dart';
 import '../../../app_init_module/domain/repository/base_app_init_repository.dart';
 import '../../../auth_module/domain/entities/user_entity.dart';
+import '../../../auth_module/presentation/controller/current_user_controller.dart';
 import '../../../community_module/data/remote_data_source/community_remote_data_source.dart';
 import '../../../community_module/data/repository/community_repository.dart';
 import '../../../community_module/domain/repository/base_community_repository.dart';
@@ -41,52 +42,13 @@ import '../../../community_module/domain/usecase/get_communities_use_case.dart';
 import '../../../widgets/custom_snack_bar.dart';
 import '../../domain/usecase/get_community_join_requests.dart';
 
-class CommunityController extends GetxController {
-  late RxList<Community> communities;
+class CommunityJoinRequestsController extends GetxController {
   late RxList<CommunityJoinRequest> communityJoinRequests;
-  RxBool loadingHomeCommunities = false.obs;
-  bool gettingCommunity = false;
-  late Community selectedCommunity;
+  late int communityId;
 
-  getCommunity(int id) async {
-    getCommunityJoinRequest(id);
-    var connectivityResult = await Connectivity().checkConnectivity();
-    if (connectivityResult == ConnectivityResult.none) {
-      customSnackBar(
-        title: "error",
-        message: "No internet connection",
-        successful: false,
-      );
-      return;
-    }
-    gettingCommunity = true;
-    update();
-    Get.toNamed('/Community_profile');
-
-    BaseCommunityRemoteDataSource communityRemoteDataSource =
-        CommunityRemoteDataSource();
-    BaseCommunityRepository communityRepository =
-        CommunityRepository(communityRemoteDataSource);
-
-    final result =
-        await GetCommunityByIdUseCase(communityRepository).execute(id);
-    result.fold((l) {
-      customSnackBar(
-        title: "error",
-        message: l.message.toString(),
-        successful: false,
-      );
-    }, (r) {
-      selectedCommunity = r;
-      d.log("got it");
-    });
-    gettingCommunity = false;
-    d.log("community events:" + selectedCommunity.events.length.toString());
-    update();
-  }
-
+  bool gettingJoinRequests = false;
   acceptJoinRequest(int userId, int requestId,String deviceToken) async {
-    final authC = Get.find<AuthController>();
+    final authC = Get.find<CurrentUserController>();
     BaseCommunityRemoteDataSource communityRemoteDataSource =
         CommunityRemoteDataSource();
     BaseCommunityRepository communityRepository =
@@ -119,7 +81,7 @@ class CommunityController extends GetxController {
         final notiC =Get.find<NotificationController>();
         notiC.sendNotification(NotificationModel(body: "Your join request has been accepted!", title: "Request accepted", receiverToken:deviceToken ));
         customSnackBar(title: "Done", message: r, successful: true);
-        getCommunityJoinRequest(authC.currentUser!.community!.id);
+        getCommunityJoinRequest();
       });
     });
 
@@ -128,7 +90,7 @@ class CommunityController extends GetxController {
   declineJoinRequest(int userId, int requestId,String deviceToken) async {
     gettingJoinRequests = true;
     update();
-    final authC = Get.find<AuthController>();
+    final authC = Get.find<CurrentUserController>();
     BaseCommunityRemoteDataSource communityRemoteDataSource =
         CommunityRemoteDataSource();
     BaseCommunityRepository communityRepository =
@@ -145,24 +107,13 @@ class CommunityController extends GetxController {
           final notiC =Get.find<NotificationController>();
           notiC.sendNotification(NotificationModel(body: "Your join request has been declined!", title: "Request Declined", receiverToken:deviceToken ));
           customSnackBar(title: "Done", message: r, successful: true);
-          getCommunityJoinRequest(authC.currentUser!.community!.id);
+          getCommunityJoinRequest();
         });
     gettingJoinRequests = false;
     update();
   }
+  getCommunityJoinRequest() async {
 
-  bool gettingJoinRequests = false;
-
-  getCommunityJoinRequest(int id) async {
-    var connectivityResult = await Connectivity().checkConnectivity();
-    if (connectivityResult == ConnectivityResult.none) {
-      customSnackBar(
-        title: "error",
-        message: "No internet connection",
-        successful: false,
-      );
-      return;
-    }
     gettingJoinRequests = true;
     update();
 
@@ -172,7 +123,7 @@ class CommunityController extends GetxController {
         CommunityRepository(communityRemoteDataSource);
 
     final result =
-        await GetCommunityJoinRequestsUseCase(communityRepository).execute(id);
+        await GetCommunityJoinRequestsUseCase(communityRepository).execute(communityId);
     result.fold((l) {
       customSnackBar(
         title: "error",
@@ -187,85 +138,11 @@ class CommunityController extends GetxController {
     update();
   }
 
-  getCommunities() async {
-    loadingHomeCommunities.value = true;
-    loadingHomeCommunities.refresh();
-    BaseCommunityRemoteDataSource communityRemoteDataSource =
-        CommunityRemoteDataSource();
-    BaseCommunityRepository communityRepository =
-        CommunityRepository(communityRemoteDataSource);
-
-    BaseAppInitRemoteDataSource appInitRemoteDataSource =
-        AppInitRemoteDataSource();
-    BaseAppInitLocalDataSource appInitLocalDataSource =
-        AppInitLocalDataSource();
-    BaseAppInitRepository appInitRepository =
-        AppInitRepository(appInitRemoteDataSource, appInitLocalDataSource);
-    final selectedRegionResult =
-        await GetSelectedRegionUseCase(appInitRepository).execute();
-    late Region region;
-    selectedRegionResult.fold((l) => d.log(l.toString()), (r) => region = r);
-
-    LimitParametersModel queryParameters = LimitParametersModel(
-        regionId: region.id, limit: 3, offset: communities.length);
-    final result = await GetCommunitiesUseCase(communityRepository)
-        .execute(queryParameters);
-    result.fold((l) {}, (r) => communities.assignAll(r));
-    loadingHomeCommunities.value = false;
-    loadingHomeCommunities.refresh();
-    communities.refresh();
-    update();
-  }
-
-  bool sendingJoinRequest = false;
-
-  askToJoin() async {
-    final authController = Get.find<AuthController>();
-    if (authController.currentUser == null) {
-      customSnackBar(
-          title: "",
-          message: "You have to login before ask to join to this community",
-          successful: false);
-      return;
-    }
-    sendingJoinRequest = true;
-    update();
-    BaseCommunityRemoteDataSource communityRemoteDataSource =
-        CommunityRemoteDataSource();
-    BaseCommunityRepository communityRepository =
-        CommunityRepository(communityRemoteDataSource);
-    final result = await AskToJoinUseCase(communityRepository).execute(
-        RequestModel(
-            userId: authController.currentUser!.id,
-            communityId: selectedCommunity.id,
-            status: 2));
-
-    result.fold((l) {
-      customSnackBar(
-          title: "", message: l.message.toString(), successful: false);
-    }, (r) async {
-
-      customSnackBar(title: "", message: r, successful: true);
-      final notiController = Get.find<NotificationController>();
-    await  notiController.sendNotification(NotificationModel(
-          body:
-              "${authController.currentUser!.name} requested to join your community",
-          title: "New join request",
-          receiverToken: selectedCommunity.admins[0].deviceToken));
-
-      authController.updateUserToken();
-      Get.off(CommunityProfileView());
-    });
-    sendingJoinRequest = false;
-    update();
-  }
-
   @override
   void onInit() {
-    communities = <Community>[].obs;
     communityJoinRequests = <CommunityJoinRequest>[].obs;
-
-    getCommunities();
+    communityId=Get.arguments;
+getCommunityJoinRequest();
     super.onInit();
   }
 }

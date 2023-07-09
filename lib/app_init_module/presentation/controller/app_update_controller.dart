@@ -12,13 +12,15 @@ import '../../domain/usecases/get_app_version_use_case.dart';
 class AppUpdateController extends GetxController{
   @override
   void onInit() {
+/*
     checkCurrentVersion();
+*/
     super.onInit();
   }
 
 
 
-  checkCurrentVersion() async {
+/*  checkCurrentVersion() async {
     log("inittt2");
 
     final result =await GetAppVersionUseCase(AppInitRepository(AppInitRemoteDataSource(),AppInitLocalDataSource())).execute();
@@ -29,6 +31,6 @@ class AppUpdateController extends GetxController{
         Get.offAll(AppUpdateView());
       }
     });
-  }
+  }*/
 
 }
